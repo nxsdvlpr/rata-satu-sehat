@@ -1,0 +1,25 @@
+query banks(
+  $where: BankWhereInput
+  $orderBy: [BankOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  banks(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    nodes {
+ id
+    createdAt
+    updatedAt
+    name
+    shortName
+    }
+  }
+}

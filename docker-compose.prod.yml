@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  rata-satu-sehat:
+    image: nxsdvlpr/rata-satu-sehat
+    container_name: rata-satu-sehat
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    hostname: rata-satu-sehat
+    restart: always

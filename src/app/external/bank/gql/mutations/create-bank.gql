@@ -1,0 +1,9 @@
+mutation createBank($data: CreateBankInput!) {
+  createBank(data: $data) {
+    id
+    createdAt
+    updatedAt
+    name
+    shortName
+  }
+}

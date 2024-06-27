@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  rata-satu-sehat-redis:
+    container_name: rata-satu-sehat-redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - 6769:6379
+    command: redis-server --save 60 1 --requirepass 1vKGh88GU9cAB6VCSDa2 --loglevel warning
+volumes:
+  rata-satu-sehat-db-data:
