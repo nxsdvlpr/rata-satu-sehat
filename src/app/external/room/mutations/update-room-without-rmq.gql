@@ -1,0 +1,8 @@
+mutation updateRoomWithoutRmq(
+  $data: UpdateRoomInput!
+  $where: RoomWhereUniqueInput!
+) {
+  updateRoomWithoutRmq(where: $where, data: $data) {
+    id
+  }
+}

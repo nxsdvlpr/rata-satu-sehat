@@ -3,9 +3,27 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   BanksQuery,
   BanksQueryVariables,
+  ClinicQuery,
+  ClinicQueryVariables,
+  ClinicsQuery,
+  ClinicsQueryVariables,
   CreateBankMutation,
   CreateBankMutationVariables,
+  RegionQuery,
+  RegionQueryVariables,
+  RegionsQuery,
+  RegionsQueryVariables,
+  RoomQuery,
+  RoomQueryVariables,
+  RoomsQuery,
+  RoomsQueryVariables,
   Sdk,
+  UnitQuery,
+  UnitQueryVariables,
+  UpdateClinicWithoutRmqMutation,
+  UpdateClinicWithoutRmqMutationVariables,
+  UpdateRoomWithoutRmqMutation,
+  UpdateRoomWithoutRmqMutationVariables,
 } from 'generated/gql/gql';
 
 @Injectable()
@@ -33,6 +51,112 @@ export class GqlRequestService {
       console.log('Error [GqlRequest]', error);
     }
 
+    return null;
+  }
+
+  async regions(
+    args: RegionsQueryVariables,
+  ): Promise<RegionsQuery['regions']['nodes'] | []> {
+    try {
+      const res = await this.gql.regions(args);
+      return res?.regions?.nodes;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return [];
+  }
+
+  async region(
+    args: RegionQueryVariables,
+  ): Promise<RegionQuery['region'] | null> {
+    try {
+      const res = await this.gql.region(args);
+      return res?.region;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
+  async clinics(
+    args: ClinicsQueryVariables,
+  ): Promise<ClinicsQuery['clinics']['nodes'] | []> {
+    try {
+      const res = await this.gql.clinics(args);
+      return res?.clinics?.nodes;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return [];
+  }
+
+  async clinic(
+    args: ClinicQueryVariables,
+  ): Promise<ClinicQuery['clinic'] | null> {
+    try {
+      const res = await this.gql.clinic(args);
+      return res?.clinic;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
+  async rooms(
+    args: RoomsQueryVariables,
+  ): Promise<RoomsQuery['rooms']['nodes'] | []> {
+    try {
+      const res = await this.gql.rooms(args);
+      return res?.rooms.nodes;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return [];
+  }
+
+  async room(args: RoomQueryVariables): Promise<RoomQuery['room'] | null> {
+    try {
+      const res = await this.gql.room(args);
+      return res?.room;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
+  async updateClinicWithoutRmq(
+    args: UpdateClinicWithoutRmqMutationVariables,
+  ): Promise<UpdateClinicWithoutRmqMutation['updateClinicWithoutRmq'] | null> {
+    try {
+      const res = await this.gql.updateClinicWithoutRmq(args);
+      return res?.updateClinicWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async updateRoomWithoutRmq(
+    args: UpdateRoomWithoutRmqMutationVariables,
+  ): Promise<UpdateRoomWithoutRmqMutation['updateRoomWithoutRmq'] | null> {
+    try {
+      const res = await this.gql.updateRoomWithoutRmq(args);
+      return res?.updateRoomWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async unit(args: UnitQueryVariables): Promise<UnitQuery['unit'] | null> {
+    try {
+      const res = await this.gql.unit(args);
+      return res?.unit;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
     return null;
   }
 }

@@ -1,0 +1,53 @@
+query clinics(
+  $where: ClinicWhereInput
+  $orderBy: [ClinicOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  clinics(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    nodes {
+      id
+      oldId
+      oldCode
+      unitId
+      ssLocationId
+      ssOrganizationId
+      unit {
+        id
+        createdAt
+        updatedAt
+        avatarAssetId
+        invoiceHeaderId
+        invoiceSignatureId
+        deletedAt
+        timezone
+        name
+        phone
+        email
+        notes
+        isExternal
+        type
+        isActive
+        isOnline
+        partnerId
+        medicalAddressId
+        address {
+          id
+          regionId
+          address
+          additionalInfo
+          postcode
+        }
+      }
+    }
+  }
+}

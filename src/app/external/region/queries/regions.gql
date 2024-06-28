@@ -1,0 +1,25 @@
+query regions(
+  $where: RegionWhereInput
+  $orderBy: [RegionOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  regions(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    nodes {
+      id
+      provinceName
+      city
+      subdistrict
+      urban
+    }
+  }
+}

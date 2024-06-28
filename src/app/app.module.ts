@@ -7,6 +7,8 @@ import { buildRmqConfigUri } from 'src/common/helpers';
 
 import { ExampleModule } from './example/example.module';
 import { GqlRequestModule } from './gql-request/gql-request.module';
+import { MigrationModule } from './migration/migration.module';
+import { SubscribeModule } from './subscribe/subscribe.module';
 
 @Module({
   imports: [
@@ -25,7 +27,9 @@ import { GqlRequestModule } from './gql-request/gql-request.module';
       }),
     }),
     GqlRequestModule,
+    MigrationModule,
     ExampleModule,
+    SubscribeModule,
   ],
 })
 export class AppModule {}
