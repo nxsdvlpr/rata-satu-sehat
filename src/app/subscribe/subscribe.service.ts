@@ -6,6 +6,8 @@ import axios from 'axios';
 import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
+import { Customer } from '../../../generated/gql/gql';
+
 @Injectable()
 export class SubscribeService {
   private config = new ConfigService();
@@ -721,5 +723,107 @@ export class SubscribeService {
     };
 
     await this.updateLocationApi(token, room.id, locationData);
+  }
+
+  async checkPatientApi(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    const fullUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
+    const token = await this.generateToken();
+
+    const customer = await this.gqlRequestService.customer({
+      id: payload.newData?.id,
+    });
+
+    if (customer.residentIdNo !== null && customer.ssPatientId === null) {
+      try {
+        const response = await axios.get(
+          fullUrl +
+            'Patient/?identifier=https://fhir.kemkes.go.id/id/nik|' +
+            customer.residentIdNo,
+
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (
+          response.data.total > 0 &&
+          response.data.entry &&
+          response.data.entry.length > 0
+        ) {
+          const ihsPatientId = response.data.entry[0].resource.id;
+          await this.gqlRequestService.updateCustomerWithoutRmq({
+            where: { id: payload.newData?.id },
+            data: {
+              ssPatientId: ihsPatientId,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        console.log(error.response.data);
+      }
+    }
+  }
+
+  async checkPractitionerApi(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    const fullUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
+
+    const practitioner = await this.gqlRequestService.staff({
+      id: payload.newData?.id,
+    });
+
+    console.log(practitioner);
+
+    if (
+      practitioner.residentIdNo !== null &&
+      (practitioner.group === 'DOCTOR' || practitioner.group === 'NURSE') &&
+      practitioner.ssPractitionerId === null
+    ) {
+      try {
+        const token = await this.generateToken();
+        const response = await axios.get(
+          fullUrl +
+            'Practitioner/?identifier=https://fhir.kemkes.go.id/id/nik|' +
+            practitioner.residentIdNo,
+
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log(response);
+
+        if (
+          response.data.total > 0 &&
+          response.data.entry &&
+          response.data.entry.length > 0
+        ) {
+          const ihsPractitionerId = response.data.entry[0].resource.id;
+          await this.gqlRequestService.updateStaffWithoutRmq({
+            where: { id: payload.newData?.id },
+            data: {
+              ssPractitionerId: ihsPractitionerId,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        console.log(error.response.data);
+      }
+    }
   }
 }

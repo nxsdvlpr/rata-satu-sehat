@@ -9,6 +9,8 @@ import {
   ClinicsQueryVariables,
   CreateBankMutation,
   CreateBankMutationVariables,
+  CustomerQuery,
+  CustomerQueryVariables,
   RegionQuery,
   RegionQueryVariables,
   RegionsQuery,
@@ -18,12 +20,18 @@ import {
   RoomsQuery,
   RoomsQueryVariables,
   Sdk,
+  StaffQuery,
+  StaffQueryVariables,
   UnitQuery,
   UnitQueryVariables,
   UpdateClinicWithoutRmqMutation,
   UpdateClinicWithoutRmqMutationVariables,
+  UpdateCustomerWithoutRmqMutation,
+  UpdateCustomerWithoutRmqMutationVariables,
   UpdateRoomWithoutRmqMutation,
   UpdateRoomWithoutRmqMutationVariables,
+  UpdateStaffWithoutRmqMutation,
+  UpdateStaffWithoutRmqMutationVariables,
 } from 'generated/gql/gql';
 
 @Injectable()
@@ -124,6 +132,28 @@ export class GqlRequestService {
     return null;
   }
 
+  async customer(
+    args: CustomerQueryVariables,
+  ): Promise<CustomerQuery['customer'] | null> {
+    try {
+      const res = await this.gql.customer(args);
+      return res?.customer;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
+  async staff(args: StaffQueryVariables): Promise<StaffQuery['staff'] | null> {
+    try {
+      const res = await this.gql.staff(args);
+      return res?.staff;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
   async updateClinicWithoutRmq(
     args: UpdateClinicWithoutRmqMutationVariables,
   ): Promise<UpdateClinicWithoutRmqMutation['updateClinicWithoutRmq'] | null> {
@@ -157,6 +187,34 @@ export class GqlRequestService {
     } catch (error) {
       console.log('Error [GqlRequest]', error);
     }
+    return null;
+  }
+
+  async updateStaffWithoutRmq(
+    args: UpdateStaffWithoutRmqMutationVariables,
+  ): Promise<UpdateStaffWithoutRmqMutation['updateStaffWithoutRmq'] | null> {
+    try {
+      const res = await this.gql.updateStaffWithoutRmq(args);
+      return res?.updateStaffWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async updateCustomerWithoutRmq(
+    args: UpdateCustomerWithoutRmqMutationVariables,
+  ): Promise<
+    UpdateCustomerWithoutRmqMutation['updateCustomerWithoutRmq'] | null
+  > {
+    try {
+      const res = await this.gql.updateCustomerWithoutRmq(args);
+      return res?.updateCustomerWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
     return null;
   }
 }
