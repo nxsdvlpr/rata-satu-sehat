@@ -745,7 +745,9 @@ export class SubscribeService {
       id: payload.newData?.id,
     });
 
-    if (customer.residentIdNo !== null && customer.ssPatientId === null) {
+    console.log(customer);
+
+    if (customer?.residentIdNo !== null && customer?.ssPatientId === null) {
       try {
         const response = await axios.get(
           fullUrl +
