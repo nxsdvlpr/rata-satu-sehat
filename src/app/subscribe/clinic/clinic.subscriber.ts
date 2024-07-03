@@ -23,6 +23,7 @@ export class ClinicSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
+      console.log('medical.clinic.created');
       this.subscribeService.createOrganization(payload, request, header);
     } catch (error) {
       console.log(error);
@@ -39,6 +40,7 @@ export class ClinicSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
+      console.log('medical.clinic.created');
       this.subscribeService.updateOrganization(payload, request, header);
     } catch (error) {
       console.log(error);
