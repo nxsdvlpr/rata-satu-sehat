@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-
 import { ClinicSubscriberSatuSehat } from './clinic/clinic.subscriber';
+import { InteractionSubscriberSatuSehat } from './interaction/interaction.subscriber';
 import { RoomSubscriberSatuSehat } from './room/room.subscriber';
 import { SubscribeService } from './subscribe.service';
 
@@ -9,7 +9,9 @@ import { SubscribeService } from './subscribe.service';
   providers: [
     ClinicSubscriberSatuSehat,
     RoomSubscriberSatuSehat,
-    SubscribeService],
-  exports: [SubscribeService]
+    SubscribeService,
+    InteractionSubscriberSatuSehat,
+  ],
+  exports: [SubscribeService],
 })
-export class SubscribeModule { }
+export class SubscribeModule {}

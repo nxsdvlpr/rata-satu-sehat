@@ -23,7 +23,7 @@ export class CustomerSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('kkk');
+      console.log('customer.customer.created');
       this.subscribeService.checkPatientApi(payload, request, header);
     } catch (error) {
       console.log(error);
@@ -40,7 +40,7 @@ export class CustomerSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('zzzdd');
+      console.log('customer.customer.updated');
       this.subscribeService.checkPatientApi(payload, request, header);
     } catch (error) {
       console.log(error);

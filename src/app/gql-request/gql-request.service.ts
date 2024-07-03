@@ -11,6 +11,10 @@ import {
   CreateBankMutationVariables,
   CustomerQuery,
   CustomerQueryVariables,
+  EmrByInteractionIdQuery,
+  EmrByInteractionIdQueryVariables,
+  Icd10Query,
+  Icd10QueryVariables,
   RegionQuery,
   RegionQueryVariables,
   RegionsQuery,
@@ -32,6 +36,8 @@ import {
   UpdateRoomWithoutRmqMutationVariables,
   UpdateStaffWithoutRmqMutation,
   UpdateStaffWithoutRmqMutationVariables,
+  UpsertEmrByInteractionIdMutation,
+  UpsertEmrByInteractionIdMutationVariables,
 } from 'generated/gql/gql';
 
 @Injectable()
@@ -190,6 +196,16 @@ export class GqlRequestService {
     return null;
   }
 
+  async icd10(args: Icd10QueryVariables): Promise<Icd10Query['icd10'] | null> {
+    try {
+      const res = await this.gql.icd10(args);
+      return res?.icd10;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
   async updateStaffWithoutRmq(
     args: UpdateStaffWithoutRmqMutationVariables,
   ): Promise<UpdateStaffWithoutRmqMutation['updateStaffWithoutRmq'] | null> {
@@ -211,6 +227,33 @@ export class GqlRequestService {
     try {
       const res = await this.gql.updateCustomerWithoutRmq(args);
       return res?.updateCustomerWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async emrByInteractionId(
+    args: EmrByInteractionIdQueryVariables,
+  ): Promise<EmrByInteractionIdQuery['emrByInteractionId'] | null> {
+    try {
+      const res = await this.gql.emrByInteractionId(args);
+      return res?.emrByInteractionId;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+    return null;
+  }
+
+  async UpsertEmrByInteractionId(
+    args: UpsertEmrByInteractionIdMutationVariables,
+  ): Promise<
+    UpsertEmrByInteractionIdMutation['upsertEmrByInteractionId'] | null
+  > {
+    try {
+      const res = await this.gql.upsertEmrByInteractionId(args);
+      return res?.upsertEmrByInteractionId || null;
     } catch (error) {
       console.log('Error [GqlRequest]', error);
     }

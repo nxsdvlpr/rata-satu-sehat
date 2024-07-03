@@ -2,11 +2,19 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import e from 'express';
+import { url } from 'inspector';
 
 import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
+import { InteractionStatus } from 'src/constants/interaction';
 
-import { Customer } from '../../../generated/gql/gql';
+import {
+  Customer,
+  EmrGeneral,
+  Icd10,
+  Interaction,
+} from '../../../generated/gql/gql';
 
 @Injectable()
 export class SubscribeService {
@@ -823,6 +831,222 @@ export class SubscribeService {
       } catch (error) {
         console.log(error);
         console.log(error.response.data);
+      }
+    }
+  }
+
+  async createConditionApi(payload: RMQBasePayload): Promise<any> {
+    if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
+      const emr = await this.gqlRequestService.emrByInteractionId({
+        interactionId: payload.newData?.id,
+      });
+
+      const customer = await this.gqlRequestService.customer({
+        id: payload.newData?.customerId,
+      });
+
+      if (
+        customer &&
+        customer?.ssPatientId &&
+        emr?.interaction?.ssEncounterId &&
+        emr?.anamnesis
+      ) {
+        const codingArray = await Promise.all(
+          emr.anamnesis.toothIcd10.map(async (item) => {
+            const icd10 = await this.getIcd10Detail(item.icd10Id);
+            return {
+              code: icd10.code,
+              system: 'http://hl7.org/fhir/sid/icd-10',
+              display: icd10.title,
+            };
+          }),
+        );
+
+        const fullUrl =
+          this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Condition';
+        const token = await this.generateToken();
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        };
+        const data = {
+          resourceType: 'Condition',
+          clinicalStatus: {
+            coding: [
+              {
+                system:
+                  'http://terminology.hl7.org/CodeSystem/condition-clinical',
+                code: 'active',
+                display: 'Active',
+              },
+            ],
+          },
+          category: [
+            {
+              coding: [
+                {
+                  system:
+                    'http://terminology.hl7.org/CodeSystem/condition-category',
+                  code: 'encounter-diagnosis',
+                  display: 'Encounter Diagnosis',
+                },
+              ],
+            },
+          ],
+          code: {
+            coding: codingArray,
+          },
+          subject: {
+            reference: `Patient/${customer.ssPatientId}`,
+            display: customer.name,
+          },
+          encounter: {
+            reference: `Encounter/${emr.interaction.ssEncounterId}`,
+          },
+          onsetDateTime: emr.updatedAt,
+          recordedDate: emr.updatedAt,
+        };
+
+        try {
+          const response = await axios.post(fullUrl, data, { headers });
+
+          console.log('response');
+          console.log(response);
+
+          let ssConditionIds = emr?.ssConditionIds || [];
+
+          if (!Array.isArray(ssConditionIds)) {
+            ssConditionIds = [];
+          }
+
+          ssConditionIds.push({
+            id: response.data.id,
+            note: 'condition diagnosis icd10_tooth',
+          });
+
+          await this.gqlRequestService.UpsertEmrByInteractionId({
+            interactionId: emr.interaction.id,
+            data: {
+              ssConditionIds: ssConditionIds,
+            },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }
+
+  async updateConditionApi(payload: RMQBasePayload): Promise<any> {
+    if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
+      const emr = await this.gqlRequestService.emrByInteractionId({
+        interactionId: payload.newData?.id,
+      });
+
+      const customer = await this.gqlRequestService.customer({
+        id: payload.newData?.customerId,
+      });
+
+      if (
+        customer &&
+        customer?.ssPatientId &&
+        emr?.interaction?.ssEncounterId &&
+        emr?.anamnesis
+      ) {
+        for (const condition of emr.ssConditionIds) {
+          const codingArray = await Promise.all(
+            emr.anamnesis.toothIcd10.map(async (item) => {
+              const icd10 = await this.getIcd10Detail(item.icd10Id);
+              return {
+                code: icd10.code,
+                system: 'http://hl7.org/fhir/sid/icd-10',
+                display: icd10.title,
+              };
+            }),
+          );
+          const fullUrl =
+            this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
+            'Condition' +
+            `/${condition.id}`;
+          const token = await this.generateToken();
+          const headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          };
+          const data = {
+            resourceType: 'Condition',
+            id: `${condition.id}`,
+            clinicalStatus: {
+              coding: [
+                {
+                  system:
+                    'http://terminology.hl7.org/CodeSystem/condition-clinical',
+                  code: 'active',
+                  display: 'Active',
+                },
+              ],
+            },
+            category: [
+              {
+                coding: [
+                  {
+                    system:
+                      'http://terminology.hl7.org/CodeSystem/condition-category',
+                    code: 'encounter-diagnosis',
+                    display: 'Encounter Diagnosis',
+                  },
+                ],
+              },
+            ],
+            code: {
+              coding: codingArray,
+            },
+            subject: {
+              reference: `Patient/${customer.ssPatientId}`,
+              display: customer.name,
+            },
+            encounter: {
+              reference: `Encounter/${emr.interaction.ssEncounterId}`,
+            },
+            onsetDateTime: emr.updatedAt,
+            recordedDate: emr.updatedAt,
+          };
+          try {
+            const response = await axios.put(fullUrl, data, { headers });
+            console.log(response);
+          } catch (error) {
+            console.log(error);
+            console.log(error.response.data);
+          }
+        }
+      }
+    }
+  }
+
+  async getIcd10Detail(id: string): Promise<any> {
+    const icd10 = await this.gqlRequestService.icd10({
+      id: id,
+    });
+    return icd10;
+  }
+
+  async syncConditionSatuSehatApi(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
+      const emr = await this.gqlRequestService.emrByInteractionId({
+        interactionId: payload.newData?.id,
+      });
+
+      if (
+        !emr.ssConditionIds ||
+        (Array.isArray(emr.ssConditionIds) && emr.ssConditionIds.length === 0)
+      ) {
+        this.createConditionApi(payload);
+      } else {
+        this.updateConditionApi(payload);
       }
     }
   }
