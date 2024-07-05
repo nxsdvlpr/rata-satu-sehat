@@ -82,7 +82,7 @@ export class PushDataRoomSatuSehatService {
             ],
           },
           managingOrganization: {
-            reference: `Organization/${room.clinic?.organizationId}`,
+            reference: `Organization/${room.clinic?.ssOrganizationId}`,
           },
         };
 
