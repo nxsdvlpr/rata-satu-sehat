@@ -23,7 +23,24 @@ export class InteractionSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
+      console.log('');
       this.subscribeService.syncConditionSatuSehatApi(payload, request, header);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  @RabbitSubscribe({
+    exchange: 'rata.medical',
+    routingKey: 'medical.interaction.updated',
+  })
+  async onCheckinInteraction(
+    @RabbitPayload() payload: RMQBasePayload,
+    @RabbitRequest() request: any,
+    @RabbitHeader() header: any,
+  ) {
+    try {
+      this.subscribeService.syncEncounterSatuSehatApi(payload, request, header);
     } catch (error) {
       console.log(error);
     }

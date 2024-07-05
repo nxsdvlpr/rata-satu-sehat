@@ -1,0 +1,11 @@
+query interactionLog($interactionId: Cuid!, $status: Cuid!) {
+  interactionLog(interactionId: $interactionId, status: $status) {
+    id
+    interactionId
+    userId
+    createdAt
+    status
+    startAt
+    endAt
+  }
+}

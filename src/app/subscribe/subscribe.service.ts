@@ -2,23 +2,19 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import e from 'express';
-import { url } from 'inspector';
 
 import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 import { InteractionStatus } from 'src/constants/interaction';
 
-import {
-  Customer,
-  EmrGeneral,
-  Icd10,
-  Interaction,
-} from '../../../generated/gql/gql';
+import { UpdateInteractionWithoutRmqMutation } from '../../../generated/gql/gql';
 
 @Injectable()
 export class SubscribeService {
   private config = new ConfigService();
+  private organizationId = this.config.get<string>(
+    'SATU_SEHAT_ORGANIZATION_ID',
+  );
   constructor(private gqlRequestService: GqlRequestService) {}
 
   async generateToken(): Promise<string> {
@@ -225,9 +221,6 @@ export class SubscribeService {
   ): Promise<any> {
     // console.log("clinic.created")
     // console.log(payload)
-    const organizationId = this.config.get<string>(
-      'SATU_SEHAT_ORGANIZATION_ID',
-    );
 
     const clinic = await this.gqlRequestService.clinic({
       id: payload.newData?.id,
@@ -245,7 +238,7 @@ export class SubscribeService {
       identifier: [
         {
           use: 'official',
-          system: `http://sys-ids.kemkes.go.id/organization/${organizationId}`,
+          system: `http://sys-ids.kemkes.go.id/organization/${this.organizationId}`,
           value: clinic.unit.name,
         },
       ],
@@ -308,7 +301,7 @@ export class SubscribeService {
         },
       ],
       partOf: {
-        reference: `Organization/${organizationId}`,
+        reference: `Organization/${this.organizationId}`,
       },
     };
 
@@ -926,7 +919,7 @@ export class SubscribeService {
             note: 'condition diagnosis icd10_tooth',
           });
 
-          await this.gqlRequestService.UpsertEmrByInteractionId({
+          await this.gqlRequestService.upsertEmrByInteractionId({
             interactionId: emr.interaction.id,
             data: {
               ssConditionIds: ssConditionIds,
@@ -1049,6 +1042,233 @@ export class SubscribeService {
         this.createConditionApi(payload);
       } else {
         this.updateConditionApi(payload);
+      }
+    }
+  }
+
+  async syncEncounterSatuSehatApi(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    if (payload.newData.status === InteractionStatus.WAITING) {
+      this.createEncounterapi(payload);
+    } else if (
+      payload.newData.status === InteractionStatus.ON_HANDLING ||
+      payload.newData.status === InteractionStatus.HANDLING_DONE
+    ) {
+      this.updateEncounterapi(payload);
+    }
+  }
+
+  async createEncounterapi(payload: RMQBasePayload): Promise<any> {
+    const interaction = await this.gqlRequestService.interaction({
+      id: payload.newData?.id,
+    });
+
+    const interactionLog = await this.gqlRequestService.interactionLog({
+      interactionId: payload.newData?.id,
+      status: InteractionStatus.WAITING,
+    });
+
+    const customer = await this.gqlRequestService.customer({
+      id: interaction.customerId,
+    });
+
+    if (
+      interaction &&
+      interaction?.ssEncounterId === null &&
+      interaction.staff.ssPractitionerId !== null &&
+      customer.ssPatientId !== null &&
+      interaction.room.ssLocationId !== null &&
+      interactionLog &&
+      interactionLog.startAt !== null
+    ) {
+      const fullUrl =
+        this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
+      const token = await this.generateToken();
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const data = {
+        resourceType: 'Encounter',
+        status: 'arrived',
+        class: {
+          system: 'http://terminology.hl7.org/CodeSystem/v3-ActCode',
+          code: 'AMB',
+          display: 'ambulatory',
+        },
+        subject: {
+          reference: `Patient/${customer.ssPatientId}`,
+          display: `${customer.name}`,
+        },
+        participant: [
+          {
+            type: [
+              {
+                coding: [
+                  {
+                    system:
+                      'http://terminology.hl7.org/CodeSystem/v3-ParticipationType',
+                    code: 'ATND',
+                    display: 'attender',
+                  },
+                ],
+              },
+            ],
+            individual: {
+              reference: `Practitioner/${interaction.staff.ssPractitionerId}`,
+              display: `${interaction.staff.name}`,
+            },
+          },
+        ],
+        period: {
+          start: `${interactionLog.startAt}`,
+        },
+        location: [
+          {
+            location: {
+              reference: `Location/${interaction.room.ssLocationId}`,
+              display: `${interaction.room.name}`,
+            },
+          },
+        ],
+        statusHistory: [
+          {
+            status: 'arrived',
+            period: {
+              start: `${interactionLog.startAt}`,
+            },
+          },
+        ],
+        serviceProvider: {
+          reference: `Organization/${this.organizationId}`,
+        },
+        identifier: [
+          {
+            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}}`,
+          },
+        ],
+      };
+
+      try {
+        const response = await axios.post(fullUrl, data, { headers });
+        await this.gqlRequestService.updateInteractionWithoutRmq({
+          where: { id: payload.newData?.id },
+          data: {
+            ssEncounterId: response.data.id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  async updateEncounterapi(payload: RMQBasePayload): Promise<any> {
+    const interaction = await this.gqlRequestService.interaction({
+      id: payload.newData?.id,
+    });
+
+    const interactionLog = await this.gqlRequestService.interactionLog({
+      interactionId: payload.newData?.id,
+      status: InteractionStatus.WAITING,
+    });
+
+    const customer = await this.gqlRequestService.customer({
+      id: interaction.customerId,
+    });
+
+    if (
+      interaction &&
+      interaction?.ssEncounterId === null &&
+      interaction.staff.ssPractitionerId !== null &&
+      customer.ssPatientId !== null &&
+      interaction.room.ssLocationId !== null &&
+      interactionLog &&
+      interactionLog.startAt !== null
+    ) {
+      const fullUrl =
+        this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
+      const token = await this.generateToken();
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const data = {
+        resourceType: 'Encounter',
+        status: 'arrived',
+        class: {
+          system: 'http://terminology.hl7.org/CodeSystem/v3-ActCode',
+          code: 'AMB',
+          display: 'ambulatory',
+        },
+        subject: {
+          reference: `Patient/${customer.ssPatientId}`,
+          display: `${customer.name}`,
+        },
+        participant: [
+          {
+            type: [
+              {
+                coding: [
+                  {
+                    system:
+                      'http://terminology.hl7.org/CodeSystem/v3-ParticipationType',
+                    code: 'ATND',
+                    display: 'attender',
+                  },
+                ],
+              },
+            ],
+            individual: {
+              reference: `Practitioner/${interaction.staff.ssPractitionerId}`,
+              display: `${interaction.staff.name}`,
+            },
+          },
+        ],
+        period: {
+          start: `${interactionLog.startAt}`,
+        },
+        location: [
+          {
+            location: {
+              reference: `Location/${interaction.room.ssLocationId}`,
+              display: `${interaction.room.name}`,
+            },
+          },
+        ],
+        statusHistory: [
+          {
+            status: 'arrived',
+            period: {
+              start: `${interactionLog.startAt}`,
+            },
+          },
+        ],
+        serviceProvider: {
+          reference: `Organization/${this.organizationId}`,
+        },
+        identifier: [
+          {
+            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}}`,
+          },
+        ],
+      };
+
+      try {
+        const response = await axios.post(fullUrl, data, { headers });
+        await this.gqlRequestService.updateInteractionWithoutRmq({
+          where: { id: payload.newData?.id },
+          data: {
+            ssEncounterId: response.data.id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
       }
     }
   }

@@ -1,0 +1,71 @@
+query interaction($id: Cuid!) {
+  interaction(id: $id) {
+    id
+    ssEncounterId
+    createdAt
+    updatedAt
+    ref
+    suborderId
+    customerId
+    objectiveId
+    isOnline
+    status
+    type
+    installationType
+    interactionDate
+    notes
+    clinicId
+    roomId
+    staffId
+    clinic {
+      id
+      ssLocationId
+      ssOrganizationId
+    }
+    room {
+      id
+      ssLocationId
+      createdAt
+      updatedAt
+      name
+      isActive
+    }
+    staff {
+      id
+      residentIdNo
+      ssPractitionerId
+      createdAt
+      updatedAt
+      avatarAssetId
+      userId
+      name
+    }
+    emr {
+      id
+      createdAt
+      updatedAt
+      customerId
+      invoiceHeaderId
+      photoAssetIds
+      fileAssetIds
+      beforePhotoAssetIds
+      afterPhotoAssetIds
+      interactionId
+    }
+    slip {
+      id
+      createdAt
+      updatedAt
+      orderId
+      doctorId
+      slipDate
+      ref
+      notes
+      productCount
+      discount
+      subtotal
+      total
+      status
+    }
+  }
+}

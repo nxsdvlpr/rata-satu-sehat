@@ -15,6 +15,10 @@ import {
   EmrByInteractionIdQueryVariables,
   Icd10Query,
   Icd10QueryVariables,
+  InteractionLogQuery,
+  InteractionLogQueryVariables,
+  InteractionQuery,
+  InteractionQueryVariables,
   RegionQuery,
   RegionQueryVariables,
   RegionsQuery,
@@ -32,6 +36,8 @@ import {
   UpdateClinicWithoutRmqMutationVariables,
   UpdateCustomerWithoutRmqMutation,
   UpdateCustomerWithoutRmqMutationVariables,
+  UpdateInteractionWithoutRmqMutation,
+  UpdateInteractionWithoutRmqMutationVariables,
   UpdateRoomWithoutRmqMutation,
   UpdateRoomWithoutRmqMutationVariables,
   UpdateStaffWithoutRmqMutation,
@@ -246,7 +252,7 @@ export class GqlRequestService {
     return null;
   }
 
-  async UpsertEmrByInteractionId(
+  async upsertEmrByInteractionId(
     args: UpsertEmrByInteractionIdMutationVariables,
   ): Promise<
     UpsertEmrByInteractionIdMutation['upsertEmrByInteractionId'] | null
@@ -254,6 +260,47 @@ export class GqlRequestService {
     try {
       const res = await this.gql.upsertEmrByInteractionId(args);
       return res?.upsertEmrByInteractionId || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async interaction(
+    args: InteractionQueryVariables,
+  ): Promise<InteractionQuery['interaction'] | null> {
+    try {
+      const res = await this.gql.interaction(args);
+      return res?.interaction || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async updateInteractionWithoutRmq(
+    args: UpdateInteractionWithoutRmqMutationVariables,
+  ): Promise<
+    UpdateInteractionWithoutRmqMutation['updateInteractionWithoutRmq'] | null
+  > {
+    try {
+      const res = await this.gql.updateInteractionWithoutRmq(args);
+      return res?.updateInteractionWithoutRmq || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async interactionLog(
+    args: InteractionLogQueryVariables,
+  ): Promise<InteractionLogQuery['interactionLog'] | null> {
+    try {
+      const res = await this.gql.interactionLog(args);
+      return res?.interactionLog || null;
     } catch (error) {
       console.log('Error [GqlRequest]', error);
     }
