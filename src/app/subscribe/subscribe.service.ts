@@ -1084,6 +1084,7 @@ export class SubscribeService {
       interactionLog &&
       interactionLog.startAt !== null
     ) {
+      console.log('aaa');
       const fullUrl =
         this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
       const token = await this.generateToken();
@@ -1148,10 +1149,12 @@ export class SubscribeService {
         },
         identifier: [
           {
-            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}}`,
+            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
           },
         ],
       };
+
+      console.log(data);
 
       try {
         const response = await axios.post(fullUrl, data, { headers });
@@ -1162,20 +1165,42 @@ export class SubscribeService {
           },
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data);
       }
     }
   }
 
   async updateEncounterapi(payload: RMQBasePayload): Promise<any> {
+    let statusValue: string = '';
+
     const interaction = await this.gqlRequestService.interaction({
       id: payload.newData?.id,
     });
 
     const interactionLog = await this.gqlRequestService.interactionLog({
       interactionId: payload.newData?.id,
-      status: InteractionStatus.WAITING,
+      status: payload.newData.status,
     });
+
+    if (payload.newData.status === InteractionStatus.ON_HANDLING) {
+      statusValue = 'in-progress';
+    }
+
+    if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
+      statusValue = 'finished';
+    }
+
+    const statusHistory = await Promise.all(
+      interaction.interactionLogs.map(async (item) => {
+        return {
+          status: statusValue,
+          period: {
+            start: item.startAt,
+            end: item.endAt,
+          },
+        };
+      }),
+    );
 
     const customer = await this.gqlRequestService.customer({
       id: interaction.customerId,
@@ -1183,7 +1208,7 @@ export class SubscribeService {
 
     if (
       interaction &&
-      interaction?.ssEncounterId === null &&
+      interaction?.ssEncounterId !== null &&
       interaction.staff.ssPractitionerId !== null &&
       customer.ssPatientId !== null &&
       interaction.room.ssLocationId !== null &&
@@ -1191,7 +1216,9 @@ export class SubscribeService {
       interactionLog.startAt !== null
     ) {
       const fullUrl =
-        this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
+        this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
+        'Encounter/' +
+        `${interaction?.ssEncounterId}`;
       const token = await this.generateToken();
       const headers = {
         'Content-Type': 'application/json',
@@ -1200,7 +1227,8 @@ export class SubscribeService {
 
       const data = {
         resourceType: 'Encounter',
-        status: 'arrived',
+        id: `${interaction?.ssEncounterId}`,
+        status: `${statusValue}`,
         class: {
           system: 'http://terminology.hl7.org/CodeSystem/v3-ActCode',
           code: 'AMB',
@@ -1232,6 +1260,7 @@ export class SubscribeService {
         ],
         period: {
           start: `${interactionLog.startAt}`,
+          end: `${interactionLog.endAt}`,
         },
         location: [
           {
@@ -1241,20 +1270,13 @@ export class SubscribeService {
             },
           },
         ],
-        statusHistory: [
-          {
-            status: 'arrived',
-            period: {
-              start: `${interactionLog.startAt}`,
-            },
-          },
-        ],
+        statusHistory: statusHistory,
         serviceProvider: {
           reference: `Organization/${this.organizationId}`,
         },
         identifier: [
           {
-            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}}`,
+            system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
           },
         ],
       };

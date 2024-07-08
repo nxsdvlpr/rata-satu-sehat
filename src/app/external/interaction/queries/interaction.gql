@@ -67,5 +67,14 @@ query interaction($id: Cuid!) {
       total
       status
     }
+    interactionLogs {
+      id
+      interactionId
+      userId
+      createdAt
+      status
+      startAt
+      endAt
+    }
   }
 }

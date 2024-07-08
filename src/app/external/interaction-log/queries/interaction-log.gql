@@ -1,4 +1,4 @@
-query interactionLog($interactionId: Cuid!, $status: Cuid!) {
+query interactionLog($interactionId: Cuid!, $status: Int!) {
   interactionLog(interactionId: $interactionId, status: $status) {
     id
     interactionId

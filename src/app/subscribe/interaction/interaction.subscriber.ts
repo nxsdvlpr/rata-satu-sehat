@@ -23,7 +23,6 @@ export class InteractionSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('');
       this.subscribeService.syncConditionSatuSehatApi(payload, request, header);
     } catch (error) {
       console.log(error);
