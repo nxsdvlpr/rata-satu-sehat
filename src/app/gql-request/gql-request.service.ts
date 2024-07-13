@@ -19,6 +19,10 @@ import {
   InteractionLogQueryVariables,
   InteractionQuery,
   InteractionQueryVariables,
+  InteractionsQuery,
+  InteractionsQueryVariables,
+  ProductQuery,
+  ProductQueryVariables,
   RegionQuery,
   RegionQueryVariables,
   RegionsQuery,
@@ -45,6 +49,11 @@ import {
   UpsertEmrByInteractionIdMutation,
   UpsertEmrByInteractionIdMutationVariables,
 } from 'generated/gql/gql';
+
+import {
+  UpdateSlipByInteractionIdMutation,
+  UpdateSlipByInteractionIdMutationVariables,
+} from '../../../generated/gql/gql';
 
 @Injectable()
 export class GqlRequestService {
@@ -301,6 +310,47 @@ export class GqlRequestService {
     try {
       const res = await this.gql.interactionLog(args);
       return res?.interactionLog || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async product(
+    args: ProductQueryVariables,
+  ): Promise<ProductQuery['product'] | null> {
+    try {
+      const res = await this.gql.product(args);
+      return res?.product || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async interactions(
+    args: InteractionsQueryVariables,
+  ): Promise<InteractionsQuery['interactions']['nodes'] | []> {
+    try {
+      const res = await this.gql.interactions(args);
+      return res?.interactions.nodes;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return [];
+  }
+
+  async updateSlipByInteractionId(
+    args: UpdateSlipByInteractionIdMutationVariables,
+  ): Promise<
+    UpdateSlipByInteractionIdMutation['updateSlipByInteractionId'] | null
+  > {
+    try {
+      const res = await this.gql.updateSlipByInteractionId(args);
+      return res?.updateSlipByInteractionId || null;
     } catch (error) {
       console.log('Error [GqlRequest]', error);
     }

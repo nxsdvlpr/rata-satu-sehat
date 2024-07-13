@@ -1,5 +1,6 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.module';
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -14,6 +15,11 @@ import { SubscribeModule } from './subscribe/subscribe.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 60 * 1000 * 60,
+      max: 1000,
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],

@@ -1,0 +1,8 @@
+mutation updateSlipByInteractionId(
+  $data: UpdateSlipByInteractionIdInput!
+  $interactionId: Cuid!
+) {
+  updateSlipByInteractionId(data: $data, interactionId: $interactionId) {
+    id
+  }
+}

@@ -13,25 +13,25 @@ import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 export class InteractionSubscriberSatuSehat {
   constructor(private subscribeService: SubscribeService) {}
 
-  @RabbitSubscribe({
-    exchange: 'rata.medical',
-    routingKey: 'medical.schedule.updated',
-  })
-  async onUpdatedEmr(
-    @RabbitPayload() payload: RMQBasePayload,
-    @RabbitRequest() request: any,
-    @RabbitHeader() header: any,
-  ) {
-    try {
-      this.subscribeService.syncConditionSatuSehatApi(payload, request, header);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // @RabbitSubscribe({
+  //   exchange: 'rata.medical',
+  //   routingKey: 'medical.schedule.updated',
+  // })
+  // async onUpdatedEmr(
+  //   @RabbitPayload() payload: RMQBasePayload,
+  //   @RabbitRequest() request: any,
+  //   @RabbitHeader() header: any,
+  // ) {
+  //   try {
+  //     this.subscribeService.syncConditionSatuSehatApi(payload, request, header);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   @RabbitSubscribe({
     exchange: 'rata.medical',
-    routingKey: 'medical.interaction.updated',
+    routingKey: 'medical.schedule.updated',
   })
   async onCheckinInteraction(
     @RabbitPayload() payload: RMQBasePayload,
@@ -39,7 +39,7 @@ export class InteractionSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      this.subscribeService.syncEncounterSatuSehatApi(payload, request, header);
+      this.subscribeService.syncSatuSehat(payload, request, header);
     } catch (error) {
       console.log(error);
     }

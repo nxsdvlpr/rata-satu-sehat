@@ -1,0 +1,28 @@
+query product($id: Cuid!) {
+  product(id: $id) {
+    id
+    oldId
+    oldCode
+    createdAt
+    updatedAt
+    title
+    abbr
+    slug
+    description
+    cost
+    price
+    weight
+    isPriceAdjustable
+    sku
+    barcodeType
+    barcodeValue
+    type
+    excludeFromExport
+    isCollection
+    isActive
+    categoryId
+    brandId
+    mediaIds
+    icd9
+  }
+}
