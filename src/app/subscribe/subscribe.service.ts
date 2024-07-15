@@ -822,8 +822,6 @@ export class SubscribeService {
       id: payload.newData?.id,
     });
 
-    console.log(practitioner);
-
     if (
       practitioner.residentIdNo !== null &&
       (practitioner.group === 'DOCTOR' || practitioner.group === 'NURSE') &&
@@ -843,8 +841,6 @@ export class SubscribeService {
             },
           },
         );
-
-        console.log(response);
 
         if (
           response.data.total > 0 &&
