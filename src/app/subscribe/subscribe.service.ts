@@ -1249,6 +1249,7 @@ export class SubscribeService {
             identifier: [
               {
                 system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                value: `${interaction.id}`,
               },
             ],
           };
@@ -1262,8 +1263,12 @@ export class SubscribeService {
               },
             });
           } catch (error) {
+            console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
+            error.response.data.issue.map((item) => {
+              console.log(item);
+            });
           }
         }
       }
@@ -1386,6 +1391,7 @@ export class SubscribeService {
             identifier: [
               {
                 system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                value: `${interaction.id}`,
               },
             ],
           };
@@ -1398,8 +1404,12 @@ export class SubscribeService {
               },
             });
           } catch (error) {
+            console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
+            error.response.data.issue.map((item) => {
+              console.log(item);
+            });
           }
         }
       }
@@ -1530,6 +1540,7 @@ export class SubscribeService {
             identifier: [
               {
                 system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                value: `${interaction.id}`,
               },
             ],
           };
@@ -1542,8 +1553,12 @@ export class SubscribeService {
               },
             });
           } catch (error) {
+            console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
+            error.response.data.issue.map((item) => {
+              console.log(item);
+            });
           }
         }
       }
@@ -1657,8 +1672,12 @@ export class SubscribeService {
               },
             });
           } catch (error) {
-            console.log(interaction.emr.id);
+            console.log('error');
+            console.log(interaction.id);
             console.log(error.response.data);
+            error.response.data.issue.map((item) => {
+              console.log(item);
+            });
           }
         }
       }
@@ -1802,8 +1821,12 @@ export class SubscribeService {
                 },
               });
             } catch (error) {
-              console.log(interaction.emr.id);
+              console.log('error');
+              console.log(interaction.id);
               console.log(error.response.data);
+              error.response.data.issue.map((item) => {
+                console.log(item);
+              });
             }
           }
         }
@@ -1897,8 +1920,12 @@ export class SubscribeService {
                 },
               });
             } catch (error) {
-              console.log(interaction.slip.id);
+              console.log('error');
+              console.log(interaction.id);
               console.log(error.response.data);
+              error.response.data.issue.map((item) => {
+                console.log(item);
+              });
             }
           }
         }
