@@ -1072,7 +1072,7 @@ export class SubscribeService {
       });
 
       if (
-        !emr.ssConditionIds ||
+        (emr && !emr.ssConditionIds) ||
         (Array.isArray(emr.ssConditionIds) && emr.ssConditionIds.length === 0)
       ) {
         this.createConditionApi(payload);
