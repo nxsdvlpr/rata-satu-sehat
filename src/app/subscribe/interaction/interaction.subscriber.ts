@@ -5,13 +5,25 @@ import {
   RabbitSubscribe,
 } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { SubscribeService } from 'src/app/subscribe/subscribe.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
 @Injectable()
 export class InteractionSubscriberSatuSehat {
-  constructor(private subscribeService: SubscribeService) {}
+  private enabledClinicIdSatuSehat: string[];
+  constructor(
+    private subscribeService: SubscribeService,
+    private configService: ConfigService,
+  ) {
+    const enabledClinicIdSatuSehatString = this.configService.get<string>(
+      'ENABLED_CLINIC_ID_SATU_SEHAT',
+    );
+    this.enabledClinicIdSatuSehat = enabledClinicIdSatuSehatString
+      ? enabledClinicIdSatuSehatString.split(',')
+      : [];
+  }
 
   // @RabbitSubscribe({
   //   exchange: 'rata.medical',
@@ -38,10 +50,17 @@ export class InteractionSubscriberSatuSehat {
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
-    try {
-      this.subscribeService.syncSatuSehat(payload, request, header);
-    } catch (error) {
-      console.log(error);
+    if (await this.checkClinicIdSatuSehat(payload.newData.clinicId)) {
+      console.log('sync satu sehat');
+      try {
+        this.subscribeService.syncSatuSehat(payload, request, header);
+      } catch (error) {
+        console.log(error);
+      }
     }
+  }
+
+  async checkClinicIdSatuSehat(clinicId: string): Promise<boolean> {
+    return this.enabledClinicIdSatuSehat.includes(clinicId);
   }
 }

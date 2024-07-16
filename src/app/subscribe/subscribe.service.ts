@@ -264,6 +264,13 @@ export class SubscribeService {
       id: payload.newData?.id,
     });
 
+
+    if (!clinic.unit.address.regionId) {
+      throw new Error(
+        `Clinic with unit_id ${payload.newData?.id} region_id does not exist`,
+      );
+    }
+
     const region = await this.gqlRequestService.region({
       id: clinic.unit?.address.regionId,
     });
@@ -415,6 +422,175 @@ export class SubscribeService {
     );
   }
 
+  async createOrganizationWithDataClinic(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    // console.log("clinic.created")
+    // console.log(payload)
+
+    const unit = await this.gqlRequestService.unit({
+      id: payload.newData?.id,
+    });
+
+    if (!unit.address.regionId) {
+      throw new Error(
+        `Clinic with unit_id ${payload.newData?.id} region_id does not exist`,
+      );
+    }
+
+    const region = await this.gqlRequestService.region({
+      id: unit?.address.regionId,
+    });
+
+    const token = await this.generateToken();
+
+    const organizationData = {
+      resourceType: 'Organization',
+      active: true,
+      identifier: [
+        {
+          use: 'official',
+          system: `http://sys-ids.kemkes.go.id/organization/${this.organizationId}`,
+          value: unit.name,
+        },
+      ],
+      type: [
+        {
+          coding: [
+            {
+              system: 'http://terminology.hl7.org/CodeSystem/organization-type',
+              code: 'prov',
+              display: 'Healthcare Provider',
+            },
+          ],
+        },
+      ],
+      name: unit.name,
+      telecom: [
+        {
+          system: 'phone',
+          value: unit.phone,
+          use: 'work',
+        },
+        {
+          system: 'email',
+          value: unit.email,
+          use: 'work',
+        },
+        {
+          system: 'url',
+          value: 'rata.id',
+          use: 'work',
+        },
+      ],
+      address: [
+        {
+          use: 'work',
+          type: 'both',
+          line: [unit.address.address],
+          city: region.city,
+          postalCode: region.postcode,
+          country: 'ID',
+          extension: [
+            {
+              url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode',
+              extension: [
+                {
+                  url: 'province',
+                  valueCode: await this.cleanedString(region.provinceCode),
+                },
+                {
+                  url: 'city',
+                  valueCode: await this.cleanedString(region.cityCode),
+                },
+                {
+                  url: 'district',
+                  valueCode: await this.cleanedString(region.subdistrictCode),
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      partOf: {
+        reference: `Organization/${this.organizationId}`,
+      },
+    };
+
+    const locationData = {
+      resourceType: 'Location',
+      status: 'active',
+      name: unit.name,
+      description: unit.name,
+      mode: 'instance',
+      telecom: [
+        {
+          system: 'phone',
+          value: unit.phone,
+          use: 'work',
+        },
+        {
+          system: 'email',
+          value: unit.email,
+          use: 'work',
+        },
+        {
+          system: 'url',
+          value: 'rata.id',
+          use: 'work',
+        },
+      ],
+      address: {
+        use: 'work',
+        line: [unit.address.address],
+        city: region.city,
+        postalCode: region.postcode,
+        country: 'ID',
+        extension: [
+          {
+            url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode',
+            extension: [
+              {
+                url: 'province',
+                valueCode: await this.cleanedString(region.provinceCode),
+              },
+              {
+                url: 'city',
+                valueCode: await this.cleanedString(region.cityCode),
+              },
+              {
+                url: 'district',
+                valueCode: await this.cleanedString(region.subdistrictCode),
+              },
+            ],
+          },
+        ],
+      },
+      physicalType: {
+        coding: [
+          {
+            system:
+              'http://terminology.hl7.org/CodeSystem/location-physical-type',
+            code: 'bu',
+            display: 'Building',
+          },
+        ],
+      },
+      managingOrganization: {
+        reference: '',
+      },
+    };
+
+    await this.createOrganizationApi(
+      token,
+      unit.clinic.id,
+      organizationData,
+      locationData,
+    );
+  }
+
   async updateOrganization(
     payload: RMQBasePayload,
     request: any,
@@ -433,6 +609,12 @@ export class SubscribeService {
       if (!unit.clinic) {
         throw new Error(
           `Clinic with unit_id ${payload.newData?.id} does not exist`,
+        );
+      }
+
+      if (!unit.address.regionId) {
+        throw new Error(
+          `Clinic with unit_id ${payload.newData?.id} region_id does not exist`,
         );
       }
 
@@ -611,6 +793,12 @@ export class SubscribeService {
       id: room.clinic?.unit?.address?.regionId,
     });
 
+    if (!room.clinic?.unit?.address.regionId) {
+      throw new Error(
+        `room with id ${payload.newData?.id} region_id does not exist`,
+      );
+    }
+
     const token = await this.generateToken();
     const locationData = {
       resourceType: 'Location',
@@ -681,7 +869,6 @@ export class SubscribeService {
 
   async updateLocation(
     payload: RMQBasePayload,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     request: any,
     header?: any,
   ): Promise<any> {
@@ -694,6 +881,12 @@ export class SubscribeService {
     const region = await this.gqlRequestService.region({
       id: room.clinic?.unit?.address?.regionId,
     });
+
+    if (!room.clinic?.unit?.address.regionId) {
+      throw new Error(
+        `room with id ${payload.newData?.id} region_id does not exist`,
+      );
+    }
 
     const token = await this.generateToken();
     const locationData = {
