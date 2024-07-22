@@ -3,12 +3,20 @@ import axios from 'axios';
 
 export class PushDataClinicSatuSehatService {
   private config = new ConfigService();
+  private enabledClinicIdSatuSehat: string[];
   constructor() {}
 
   async runSatuSehatOrganizationSync(gqlRequestService: any): Promise<void> {
     const organizationId = this.config.get<string>(
       'SATU_SEHAT_ORGANIZATION_ID',
     );
+
+    const enabledClinicIdSatuSehatString = this.config.get<string>(
+      'ENABLED_CLINIC_ID_SATU_SEHAT',
+    );
+    this.enabledClinicIdSatuSehat = enabledClinicIdSatuSehatString
+      ? enabledClinicIdSatuSehatString.split(',')
+      : [];
 
     // const clinics = await gqlRequestService.clinics({
     //   OR : [
@@ -42,7 +50,8 @@ export class PushDataClinicSatuSehatService {
       if (
         clinic.unit?.address?.regionId &&
         clinic.ssLocationId === null &&
-        clinic.ssOrganizationId === null
+        clinic.ssOrganizationId === null &&
+        (await this.checkClinicIdSatuSehat(clinic.id))
       ) {
         const region = await this.getRegion(
           gqlRequestService,
@@ -313,5 +322,9 @@ export class PushDataClinicSatuSehatService {
 
   async cleanedString(code: string): Promise<string> {
     return code.replace(/\./g, '');
+  }
+
+  async checkClinicIdSatuSehat(clinicId: string): Promise<boolean> {
+    return this.enabledClinicIdSatuSehat.includes(clinicId);
   }
 }
