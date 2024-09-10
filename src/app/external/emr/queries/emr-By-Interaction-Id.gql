@@ -38,7 +38,6 @@ query emrByInteractionId($interactionId: Cuid!) {
       pastSurgical
       womanExpectingBaby
       womanBreastFeeding
-      ssAllergyIntoleranceId
       emr {
         id
         createdAt
