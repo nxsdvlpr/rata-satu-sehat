@@ -1,0 +1,23 @@
+query room($id: Cuid!) {
+  room(id: $id) {
+    id
+    name
+    ssLocationId
+    clinic{
+      id
+      ssOrganizationId
+      unit{
+        id
+        name
+        phone
+        email
+        address{
+          id
+          regionId
+          address
+          postcode
+        }
+      }
+    }
+  }
+}

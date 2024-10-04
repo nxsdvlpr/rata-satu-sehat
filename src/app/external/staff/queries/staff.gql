@@ -1,0 +1,8 @@
+query staff($id: Cuid!) {
+  staff(id: $id) {
+    id
+    residentIdNo
+    group
+    ssPractitionerId
+  }
+}

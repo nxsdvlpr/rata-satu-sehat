@@ -1,0 +1,8 @@
+mutation upsertEmrByInteractionId(
+  $data: UpsertEmrByInteractionIdInput!
+  $interactionId: Cuid!
+) {
+  upsertEmrByInteractionId(data: $data, interactionId: $interactionId) {
+    id
+  }
+}

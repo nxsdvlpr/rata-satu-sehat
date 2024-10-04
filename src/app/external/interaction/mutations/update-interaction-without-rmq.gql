@@ -1,0 +1,8 @@
+mutation updateInteractionWithoutRmq(
+  $data: UpdateInteractionInput!
+  $where: InteractionWhereUniqueInput!
+) {
+  updateInteractionWithoutRmq(data: $data, where: $where) {
+    id
+  }
+}

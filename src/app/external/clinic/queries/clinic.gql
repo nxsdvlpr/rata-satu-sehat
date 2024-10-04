@@ -1,0 +1,39 @@
+query clinic($id: Cuid!) {
+  clinic(id: $id) {
+    id
+    oldId
+    oldCode
+    unitId
+    ssLocationId
+    ssOrganizationId
+    ssClientId
+    ssClientSecret
+    unit {
+      id
+      createdAt
+      updatedAt
+      avatarAssetId
+      invoiceHeaderId
+      invoiceSignatureId
+      deletedAt
+      timezone
+      name
+      phone
+      email
+      notes
+      isExternal
+      type
+      isActive
+      isOnline
+      partnerId
+      medicalAddressId
+      address {
+        id
+        regionId
+        address
+        additionalInfo
+        postcode
+      }
+    }
+  }
+}

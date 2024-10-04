@@ -1,0 +1,15 @@
+query region($id: Cuid!) {
+  region(id: $id) {
+    id
+    provinceCode
+    cityCode
+    subdistrictCode
+    regionCode
+    provinceName
+    cityTitle
+    city
+    subdistrict
+    urban
+    postcode
+  }
+}

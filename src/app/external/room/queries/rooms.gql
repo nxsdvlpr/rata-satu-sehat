@@ -1,0 +1,39 @@
+query rooms(
+  $where: RoomWhereInput
+  $orderBy: [RoomOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  rooms(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    nodes {
+      id
+      name
+      ssLocationId
+      clinic{
+        id
+        ssOrganizationId
+        unit{
+          id
+          name
+          phone
+          email
+          address{
+            id
+            regionId
+            address
+            postcode
+          }
+        }
+      }
+    }
+  }
+}

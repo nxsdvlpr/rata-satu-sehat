@@ -1,0 +1,73 @@
+query emrByInteractionId($interactionId: Cuid!) {
+  emrByInteractionId(interactionId: $interactionId) {
+    id
+    createdAt
+    updatedAt
+    customerId
+    invoiceHeaderId
+    photoAssetIds
+    fileAssetIds
+    beforePhotoAssetIds
+    afterPhotoAssetIds
+    interactionId
+    ssConditionIds
+    interaction {
+      id
+      oldId
+      ssEncounterId
+      createdAt
+      updatedAt
+      ref
+    }
+    general {
+      id
+      emrId
+      icd10Id
+      doctorId
+      diagnosisType
+      missingTooth
+      impactedTooth
+      impactedOdontectomyAggree
+      icd10Diagnosis
+      diagnosis
+      allergy
+      medicalHistory
+      currentlyOnMedication
+      badHabits
+      pastMedical
+      pastSurgical
+      womanExpectingBaby
+      womanBreastFeeding
+      emr {
+        id
+        createdAt
+        updatedAt
+        customerId
+        invoiceHeaderId
+        photoAssetIds
+        fileAssetIds
+        beforePhotoAssetIds
+        afterPhotoAssetIds
+        interactionId
+      }
+      icd10 {
+        id
+        title
+        code
+      }
+    }
+    anamnesis {
+      id
+      doctorId
+      emrId
+      odontogram
+      toothIcd10
+      complaint
+      diagnosis
+      treatment
+    }
+    customer {
+      id
+    }
+  }
+}

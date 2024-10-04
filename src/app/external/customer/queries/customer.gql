@@ -1,0 +1,8 @@
+query customer($id: Cuid!) {
+  customer(id: $id) {
+    id
+    name
+    residentIdNo
+    ssPatientId
+  }
+}

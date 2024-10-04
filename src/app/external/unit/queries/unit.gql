@@ -1,0 +1,35 @@
+query unit($id: Cuid!) {
+  unit(id: $id) {
+    id
+    createdAt
+    updatedAt
+    avatarAssetId
+    invoiceHeaderId
+    invoiceSignatureId
+    deletedAt
+    timezone
+    name
+    phone
+    email
+    notes
+    isExternal
+    type
+    isActive
+    isOnline
+    partnerId
+    medicalAddressId
+    address {
+      id
+      regionId
+      address
+      additionalInfo
+      postcode
+    }
+    clinic {
+      id
+      unitId
+      ssOrganizationId
+      ssLocationId
+    }
+  }
+}
