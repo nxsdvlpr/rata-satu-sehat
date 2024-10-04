@@ -1393,26 +1393,26 @@ export class SubscribeService {
         console.error('Error in createBulkConditionApi:', error);
       }
 
-      // try {
-      //   await this.createBulkObservationApi(payload);
-      // } catch (error) {
-      //   console.error('Error in createBulkObservationApi:', error);
-      // }
+      try {
+        await this.createBulkObservationApi(payload);
+      } catch (error) {
+        console.error('Error in createBulkObservationApi:', error);
+      }
 
-      // try {
-      //   await this.createBulkProcedureApi(payload);
-      // } catch (error) {
-      //   console.error('Error in createBulkProcedureApi:', error);
-      // }
+      try {
+        await this.createBulkProcedureApi(payload);
+      } catch (error) {
+        console.error('Error in createBulkProcedureApi:', error);
+      }
 
-      // try {
-      //   await this.updateBulkEncounterFinishedApi(
-      //     payload,
-      //     EncounterStatus.finished,
-      //   );
-      // } catch (error) {
-      //   console.error('Error in updateBulkEncounterFinishedApi:', error);
-      // }
+      try {
+        await this.updateBulkEncounterFinishedApi(
+          payload,
+          EncounterStatus.finished,
+        );
+      } catch (error) {
+        console.error('Error in updateBulkEncounterFinishedApi:', error);
+      }
     }
   }
 
