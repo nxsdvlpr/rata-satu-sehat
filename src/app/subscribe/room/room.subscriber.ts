@@ -13,6 +13,8 @@ import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 @Injectable()
 export class RoomSubscriberSatuSehat {
   private enabledClinicIdSatuSehat: string[];
+  private enabledUnitIdSatuSehat: string[];
+
   constructor(
     private subscribeService: SubscribeService,
     private configService: ConfigService,
@@ -22,6 +24,13 @@ export class RoomSubscriberSatuSehat {
     );
     this.enabledClinicIdSatuSehat = enabledClinicIdSatuSehatString
       ? enabledClinicIdSatuSehatString.split(',')
+      : [];
+
+    const enabledUnitIdSatuSehatString = this.configService.get<string>(
+      'ENABLED_UNIT_ID_SATU_SEHAT',
+    );
+    this.enabledUnitIdSatuSehat = enabledUnitIdSatuSehatString
+      ? enabledUnitIdSatuSehatString.split(',')
       : [];
   }
 
@@ -34,7 +43,9 @@ export class RoomSubscriberSatuSehat {
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
-    if (await this.checkClinicIdSatuSehat(payload.newData.clinicId)) {
+    // console.log(payload.newData);
+    const clinic = await this.subscribeService.clinic(payload.newData.clinicId);
+    if (await this.checkUnitIdSatuSehat(clinic.unit?.id)) {
       try {
         this.subscribeService.createLocation(payload, request, header);
       } catch (error) {
@@ -67,5 +78,9 @@ export class RoomSubscriberSatuSehat {
 
   async checkClinicIdSatuSehat(clinicId: string): Promise<boolean> {
     return this.enabledClinicIdSatuSehat.includes(clinicId);
+  }
+
+  async checkUnitIdSatuSehat(unitId: string): Promise<boolean> {
+    return this.enabledUnitIdSatuSehat.includes(unitId);
   }
 }
