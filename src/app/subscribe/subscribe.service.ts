@@ -2494,4 +2494,14 @@ export class SubscribeService {
       }
     }
   }
+
+  async clinic(clinicId: any) {
+    const clinic = this.gqlRequestService.clinic({ id: clinicId });
+    return clinic;
+  }
+
+  async unit(unitId: any) {
+    const unit = this.gqlRequestService.unit({ id: unitId });
+    return unit;
+  }
 }
