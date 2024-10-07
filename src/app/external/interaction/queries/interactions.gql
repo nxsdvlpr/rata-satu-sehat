@@ -38,6 +38,8 @@ query interactions(
         id
         ssLocationId
         ssOrganizationId
+        ssClientId
+        ssClientSecret
       }
       room {
         id

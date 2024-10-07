@@ -13,6 +13,8 @@ import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 @Injectable()
 export class InteractionSubscriberSatuSehat {
   private enabledClinicIdSatuSehat: string[];
+  private enabledUnitIdSatuSehat: string[];
+
   constructor(
     private subscribeService: SubscribeService,
     private configService: ConfigService,
@@ -22,6 +24,13 @@ export class InteractionSubscriberSatuSehat {
     );
     this.enabledClinicIdSatuSehat = enabledClinicIdSatuSehatString
       ? enabledClinicIdSatuSehatString.split(',')
+      : [];
+
+    const enabledUnitIdSatuSehatString = this.configService.get<string>(
+      'ENABLED_UNIT_ID_SATU_SEHAT',
+    );
+    this.enabledUnitIdSatuSehat = enabledUnitIdSatuSehatString
+      ? enabledUnitIdSatuSehatString.split(',')
       : [];
   }
 
@@ -40,20 +49,24 @@ export class InteractionSubscriberSatuSehat {
   //     console.log(error);
   //   }
   // }
-
   @RabbitSubscribe({
     exchange: 'rata.medical',
-    routingKey: 'medical.schedule.updated',
+    routingKey: 'medical.interaction.setStatus',
   })
   async onCheckinInteraction(
     @RabbitPayload() payload: RMQBasePayload,
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
-    if (await this.checkClinicIdSatuSehat(payload.newData.clinicId)) {
+    console.log('medical.interaction.setStatus');
+    // console.log(payload.newData.clinicId);
+    // const check = await this.checkClinicIdSatuSehat(payload.newData.clinicId);
+    // console.log(check);
+    const clinic = await this.subscribeService.clinic(payload.newData.clinicId);
+    if (await this.checkUnitIdSatuSehat(clinic.unitId)) {
       console.log('sync satu sehat');
       try {
-        this.subscribeService.syncSatuSehat(payload, request, header);
+        await this.subscribeService.syncSatuSehat(payload, request, header);
       } catch (error) {
         console.log(error);
       }
@@ -62,5 +75,9 @@ export class InteractionSubscriberSatuSehat {
 
   async checkClinicIdSatuSehat(clinicId: string): Promise<boolean> {
     return this.enabledClinicIdSatuSehat.includes(clinicId);
+  }
+
+  async checkUnitIdSatuSehat(unitId: string): Promise<boolean> {
+    return this.enabledUnitIdSatuSehat.includes(unitId);
   }
 }

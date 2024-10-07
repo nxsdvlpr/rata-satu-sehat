@@ -21,6 +21,8 @@ query interaction($id: Cuid!) {
       id
       ssLocationId
       ssOrganizationId
+      ssClientId
+      ssClientSecret
     }
     room {
       id
@@ -79,7 +81,7 @@ query interaction($id: Cuid!) {
       total
       status
       ssProcedureIds
-      slipItems{
+      slipItems {
         id
         createdAt
         updatedAt
@@ -94,7 +96,7 @@ query interaction($id: Cuid!) {
         discount
         subtotal
         slipId
-        product{
+        product {
           id
         }
       }

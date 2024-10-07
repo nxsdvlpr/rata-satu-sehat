@@ -4,10 +4,23 @@ import { assign, lowerCase, set, startCase } from 'lodash';
 import { resolve } from 'path';
 import slugify from 'slugify';
 
-export const buildRmqConfigUri = (config) =>
-  `amqp://${config.get('RABBITMQ_USER')}:${config.get(
-    'RABBITMQ_PASSWORD',
-  )}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`;
+export const buildRmqConfigUri = (config) => {
+  // `amqp://${config.get('RABBITMQ_USER')}:${config.get(
+  //   'RABBITMQ_PASSWORD',
+  // )}@${config.get('RABBITMQ_HOST')}:${config.get('RABBITMQ_PORT')}`;
+  const user = config.get('RABBITMQ_USER');
+  const password = config.get('RABBITMQ_PASSWORD');
+  const host = config.get('RABBITMQ_HOST');
+  const port = config.get('RABBITMQ_PORT');
+
+  const vhost = config.get('RABBITMQ_VHOST')
+    ? `/${config.get('RABBITMQ_VHOST')}`
+    : '';
+
+  const url = `amqp://${user}:${password}@${host}:${port}${vhost}`;
+
+  return url;
+};
 
 // loop number from given number and stop to given number
 export const loopNumber = (start: number, stop: number): number[] => {

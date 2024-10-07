@@ -264,7 +264,6 @@ export class SubscribeService {
       id: payload.newData?.id,
     });
 
-
     if (!clinic.unit.address.regionId) {
       throw new Error(
         `Clinic with unit_id ${payload.newData?.id} region_id does not exist`,
@@ -975,7 +974,6 @@ export class SubscribeService {
           fullUrl +
             'Patient/?identifier=https://fhir.kemkes.go.id/id/nik|' +
             customer.residentIdNo,
-
           {
             headers: {
               'Content-Type': 'application/json',
