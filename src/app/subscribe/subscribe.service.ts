@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
 import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
+import { removeDot } from 'src/common/helpers';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 import { EncounterStatus } from 'src/constants/encounter';
 import { InteractionStatus } from 'src/constants/interaction';
@@ -31,6 +32,25 @@ export class SubscribeService {
       new URLSearchParams({
         client_id: clientId,
         client_secret: clientSecret,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+    // console.log('ini token ', response.data.access_token);
+    return response.data.access_token;
+  }
+
+  async generateTokenClinic(data: any): Promise<string> {
+    const authUrl = this.config.get<string>('SATU_SEHAT_URL_AUTH');
+
+    const response = await axios.post(
+      authUrl,
+      new URLSearchParams({
+        client_id: data.ssClientId,
+        client_secret: data.ssClientSecret,
       }),
       {
         headers: {
@@ -69,7 +89,39 @@ export class SubscribeService {
         'satu_sehat_auth_token',
         response.data.access_token,
       );
+      // console.log('ini token ', response, ' ', satuSehatToken);
+      return response.data.access_token;
+    }
 
+    return satuSehatToken;
+  }
+
+  async generateTokenClinicWithCache(data: any): Promise<string> {
+    const authUrl = this.config.get<string>('SATU_SEHAT_URL_AUTH');
+
+    const satuSehatToken: string = await this.cacheManager.get(
+      'satu_sehat_auth_token',
+    );
+    console.log(satuSehatToken);
+    if (satuSehatToken === null || satuSehatToken === undefined) {
+      const response = await axios.post(
+        authUrl,
+        new URLSearchParams({
+          client_id: data.ssClientId,
+          client_secret: data.ssClientSecret,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+
+      this.cacheManager.set(
+        'satu_sehat_auth_token',
+        response.data.access_token,
+      );
+      console.log(response.data.access_token);
       return response.data.access_token;
     }
 
@@ -968,12 +1020,12 @@ export class SubscribeService {
       id: payload.newData?.id,
     });
 
-    if (customer?.residentIdNo !== null && customer?.ssPatientId === null) {
+    if (customer?.identifierNo !== null && customer?.ssPatientId === null) {
       try {
         const response = await axios.get(
           fullUrl +
             'Patient/?identifier=https://fhir.kemkes.go.id/id/nik|' +
-            customer.residentIdNo,
+            customer.identifierNo,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -981,7 +1033,7 @@ export class SubscribeService {
             },
           },
         );
-
+        console.log(response.data);
         if (
           response.data.total > 0 &&
           response.data.entry &&
@@ -1294,6 +1346,7 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
+    // console.log(payload);
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       try {
         await this.createBulkEncounterApi(payload);
@@ -1356,7 +1409,7 @@ export class SubscribeService {
         },
       },
     });
-
+    console.log('createBulkEncounterApi', interactions);
     if (interactions.length > 0) {
       for (const interaction of interactions) {
         const interactionLog = await this.gqlRequestService.interactionLog({
@@ -1366,7 +1419,7 @@ export class SubscribeService {
         const customer = await this.gqlRequestService.customer({
           id: interaction.customerId,
         });
-
+        console.log(customer);
         if (
           interaction &&
           interaction?.ssEncounterId === null &&
@@ -1379,6 +1432,10 @@ export class SubscribeService {
           const fullUrl =
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
           const token = await this.generateTokenWithCache();
+          // const token2 = await this.generateTokenClinicWithCache(
+          //   interactions[0].clinic,
+          // );
+          console.log(token);
           const headers = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -1435,10 +1492,12 @@ export class SubscribeService {
               },
             ],
             serviceProvider: {
+              // reference: `Organization/${interactions[0].clinic.ssOrganizationId}`,
               reference: `Organization/${this.organizationId}`,
             },
             identifier: [
               {
+                // system: `http://sys-ids.kemkes.go.id/encounter/${interactions[0].clinic.ssOrganizationId}`,
                 system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
                 value: `${interaction.id}`,
               },
@@ -1447,6 +1506,7 @@ export class SubscribeService {
 
           try {
             const response = await axios.post(fullUrl, data, { headers });
+            console.log(response);
             await this.gqlRequestService.updateInteractionWithoutRmq({
               where: { id: interaction.id },
               data: {
@@ -1844,7 +1904,6 @@ export class SubscribeService {
 
           try {
             const response = await axios.post(fullUrl, data, { headers });
-
             let ssConditionIds = interaction?.emr.ssConditionIds || [];
 
             if (!Array.isArray(ssConditionIds)) {
@@ -2495,13 +2554,249 @@ export class SubscribeService {
     }
   }
 
-  async clinic(clinicId: any) {
-    const clinic = this.gqlRequestService.clinic({ id: clinicId });
-    return clinic;
+  async unit(id: any): Promise<any> {
+    return await this.gqlRequestService.unit({ id: id });
   }
 
-  async unit(unitId: any) {
-    const unit = this.gqlRequestService.unit({ id: unitId });
-    return unit;
+  async clinic(id: any): Promise<any> {
+    return await this.gqlRequestService.clinic({ id: id });
+  }
+
+  async createPatientSatuSehat(data?: any): Promise<any> {
+    const token = await this.generateTokenClinic(data?.clinic);
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const dataPatient = {
+      resourceType: 'Patient',
+      meta: {
+        profile: ['https://fhir.kemkes.go.id/r4/StructureDefinition/Patient'],
+      },
+      identifier: [
+        {
+          use: 'official',
+          system: `https://fhir.kemkes.go.id/id/${data.customer.identifierType == 'RESIDENT_ID' ? 'nik' : 'paspor'}`,
+          value: data.customer.identifierNo,
+        },
+      ],
+      active: true,
+      name: [
+        {
+          use: 'official',
+          text: data.customer.name,
+        },
+      ],
+      telecom: [
+        {
+          system: 'phone',
+          value: data.customer.phone,
+          use: 'mobile',
+        },
+        {
+          system: 'phone',
+          value: data.customer.phoneAlt,
+          use: 'home',
+        },
+        {
+          system: 'email',
+          value: data.customer.email,
+          use: 'home',
+        },
+      ],
+      gender: data.customer.gender,
+      birthDate: data.customer.birthdate,
+      deceasedBoolean: false,
+      address: [
+        {
+          use: 'home',
+          line: [data.customer.address],
+          city: data.customer.region.provinceName,
+          postalCode: data.customer.region.postcode,
+          country: 'ID',
+          extension: [
+            {
+              url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode',
+              extension: [
+                {
+                  url: 'province',
+                  valueCode: removeDot(data.customer.region.provinceCode),
+                },
+                {
+                  url: 'city',
+                  valueCode: removeDot(data.customer.region.cityCode),
+                },
+                {
+                  url: 'district',
+                  valueCode: removeDot(data.customer.region.subdistrictCode),
+                },
+                {
+                  url: 'village',
+                  valueCode: removeDot(data.customer.region.regionCode),
+                },
+                {
+                  url: 'rt',
+                  valueCode: '0',
+                },
+                {
+                  url: 'rw',
+                  valueCode: '0',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      maritalStatus: {
+        coding: [
+          {
+            system: 'http://terminology.hl7.org/CodeSystem/v3-MaritalStatus',
+            code: 'M',
+            display: 'Married',
+          },
+        ],
+        text: 'Married',
+      },
+      multipleBirthInteger: 0,
+      contact: [
+        {
+          relationship: [
+            {
+              coding: [
+                {
+                  system: 'http://terminology.hl7.org/CodeSystem/v2-0131',
+                  code: 'C',
+                },
+              ],
+            },
+          ],
+          name: {
+            use: 'official',
+            text: 'Jane Smith',
+          },
+          telecom: [
+            {
+              system: 'phone',
+              value: '0690383372',
+              use: 'mobile',
+            },
+          ],
+        },
+      ],
+      communication: [
+        {
+          language: {
+            coding: [
+              {
+                system: 'urn:ietf:bcp:47',
+                code: 'id-ID',
+                display: 'Indonesian',
+              },
+            ],
+            text: 'Indonesian',
+          },
+          preferred: true,
+        },
+      ],
+      extension: [
+        {
+          url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace',
+          valueAddress: {
+            city: 'Bandung',
+            country: 'ID',
+          },
+        },
+        {
+          url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus',
+          valueCode: 'WNI',
+        },
+      ],
+    };
+
+    const fullUrl =
+      this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Patient';
+    try {
+      const response = await axios.post(fullUrl, dataPatient, { headers });
+
+      await this.gqlRequestService.updateCustomerWithoutRmq({
+        where: { id: data.customer?.id },
+        data: {
+          ssPatientId: response?.data?.data?.patient_id,
+        },
+      });
+
+      return response?.data?.data?.patient_id;
+    } catch (error) {
+      console.log('ini response errors', error.response?.data);
+      console.log('ini response errors', error.response?.data?.issue);
+    }
+  }
+
+  async postConsentPatient(data: any): Promise<any> {
+    const token = await this.generateTokenClinic(data?.unit?.clinic);
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const dataConsent = {
+      patient_id: data.ihs,
+      action: 'OPTIN',
+      agent: 'Nama Petugas',
+    };
+
+    const fullUrl = this.config.get<string>('SATU_SEHAT_URL_CONSENT');
+
+    try {
+      const response = await axios.post(fullUrl, dataConsent, { headers });
+      console.log(response?.data?.status);
+
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async customerConsentPost(payload: any): Promise<any> {
+    const customer = await this.gqlRequestService.customer({
+      id: payload?.customerId,
+    });
+
+    const unit = await this.unit(payload.data?.customerConsents[0].unitId);
+    let dataCustomer = null;
+
+    if (!customer.ssPatientId) {
+      console.log('ini tidak ada ihs');
+
+      let dataConsent = null;
+      dataCustomer = {
+        customer,
+        ...unit,
+      };
+
+      const response = await this.createPatientSatuSehat(dataCustomer);
+
+      dataConsent = {
+        name: customer.name,
+        unit: unit,
+        ihs: response,
+      };
+
+      await this.postConsentPatient(dataConsent);
+    } else {
+      console.log('ini ada ihs');
+      dataCustomer = {
+        name: customer.name,
+        unit: unit,
+        ihs: customer.ssPatientId,
+      };
+
+      const postConsent = await this.postConsentPatient(dataCustomer);
+
+      return postConsent;
+    }
   }
 }

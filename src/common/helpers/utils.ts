@@ -177,3 +177,9 @@ export const assignWhereArgs = (args: any, obj: any): void => {
     AND: [args.where, obj],
   });
 };
+
+export const removeDot = (data: any): string => {
+  const res = data.replace(/\./g, '');
+  console.log(res);
+  return res;
+};

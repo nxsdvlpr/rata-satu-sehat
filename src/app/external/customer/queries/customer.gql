@@ -1,8 +1,58 @@
 query customer($id: Cuid!) {
   customer(id: $id) {
     id
+    ref
+    createdAt
+    updatedAt
+    lastVisitAt
+    regionId
+    avatarAssetId
     name
-    residentIdNo
+    phone
+    phoneAlt
+    email
+    gender
+    birthdate
+    notes
+    company
+    address
+    additionalInfo
+    postcode
+    identifierNo
     ssPatientId
+    oldId
+    satusehatConsentStatus
+    identifierType
+    region {
+      id
+      provinceCode
+      cityCode
+      subdistrictCode
+      regionCode
+      provinceName
+      cityTitle
+      city
+      subdistrict
+      urban
+      postcode
+    }
+    addresses {
+      id
+      createdAt
+      updatedAt
+      customerId
+      regionId
+      label
+      name
+      phone
+      company
+      address
+      additionalInfo
+      postcode
+      isPrimary
+    }
+    customerConsents {
+      id
+    }
   }
 }
