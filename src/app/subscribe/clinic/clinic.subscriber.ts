@@ -51,7 +51,12 @@ export class ClinicSubscriberSatuSehat {
     if (await this.checkUnitIdSatuSehat(unit.id)) {
       try {
         console.log('medical.clinic.created');
-        this.subscribeService.createOrganization(payload, request, header);
+        // this.subscribeService.createOrganization(payload, request, header);
+        await this.subscribeService.createClinicBuilding(
+          payload,
+          request,
+          header,
+        );
       } catch (error) {
         console.log(error);
       }

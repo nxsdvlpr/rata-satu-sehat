@@ -10,6 +10,8 @@ import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 import { EncounterStatus } from 'src/constants/encounter';
 import { InteractionStatus } from 'src/constants/interaction';
 
+import { LoggerService } from './logger.service';
+
 @Injectable()
 export class SubscribeService {
   private config = new ConfigService();
@@ -20,6 +22,7 @@ export class SubscribeService {
   constructor(
     private gqlRequestService: GqlRequestService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly loggerService: LoggerService,
   ) {}
 
   async generateToken(): Promise<string> {
@@ -98,7 +101,7 @@ export class SubscribeService {
 
   async generateTokenClinicWithCache(data: any): Promise<string> {
     const authUrl = this.config.get<string>('SATU_SEHAT_URL_AUTH');
-
+    console.log(data);
     const satuSehatToken: string = await this.cacheManager.get(
       'satu_sehat_auth_token',
     );
@@ -326,7 +329,8 @@ export class SubscribeService {
       id: clinic.unit?.address.regionId,
     });
 
-    const token = await this.generateToken();
+    // const token = await this.generateToken();
+    const token = await this.generateTokenClinic(clinic);
 
     const organizationData = {
       resourceType: 'Organization',
@@ -1019,7 +1023,7 @@ export class SubscribeService {
     const customer = await this.gqlRequestService.customer({
       id: payload.newData?.id,
     });
-
+    console.log(payload.newData);
     if (customer?.identifierNo !== null && customer?.ssPatientId === null) {
       try {
         const response = await axios.get(
@@ -1033,7 +1037,7 @@ export class SubscribeService {
             },
           },
         );
-        console.log(response.data);
+
         if (
           response.data.total > 0 &&
           response.data.entry &&
@@ -1048,8 +1052,7 @@ export class SubscribeService {
           });
         }
       } catch (error) {
-        console.log(error);
-        console.log(error.response.data);
+        await this.loggerService.logAxiosError(error);
       }
     }
   }
@@ -1346,52 +1349,68 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    // console.log(payload);
+    // console.log(payload.newData);
+    const customer = await this.gqlRequestService.customer({
+      id: payload?.newData?.customerId,
+    });
+    // console.log(customer);
+    if (!customer.ssPatientId) {
+      const clinic = await this.gqlRequestService.clinic({
+        id: payload?.newData?.clinicId,
+      });
+      const dataPasient = {
+        clinic: clinic,
+        customer: customer,
+      };
+      // console.log(dataPasient);
+      await this.createPatientSatuSehat(dataPasient);
+    }
+
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       try {
-        await this.createBulkEncounterApi(payload);
+        // await this.createBulkEncounterApi(payload);
         console.log('createBulkEncounterApi completed');
       } catch (error) {
         console.error('Error in createBulkEncounterApi:', error);
       }
 
-      try {
-        await this.updateBulkEncounterOnHandlingApi(
-          payload,
-          EncounterStatus.inProgress,
-        );
-        console.log('updateBulkEncounterOnHandlingApi completed');
-      } catch (error) {
-        console.error('Error in updateBulkEncounterOnHandlingApi:', error);
-      }
+      // try {
+      //   await this.updateBulkEncounterOnHandlingApi(
+      //     payload,
+      //     EncounterStatus.inProgress,
+      //   );
+      //   console.log('updateBulkEncounterOnHandlingApi completed');
+      // } catch (error) {
+      //   console.error('Error in updateBulkEncounterOnHandlingApi:', error);
+      // }
 
-      try {
-        await this.createBulkConditionApi(payload);
-        console.log('createBulkConditionApi completed');
-      } catch (error) {
-        console.error('Error in createBulkConditionApi:', error);
-      }
+      // try {
+      //   await this.createBulkConditionApi(payload);
+      //   console.log('createBulkConditionApi completed');
+      // } catch (error) {
+      //   console.error('Error in createBulkConditionApi:', error);
+      // }
 
-      try {
-        await this.createBulkObservationApi(payload);
-      } catch (error) {
-        console.error('Error in createBulkObservationApi:', error);
-      }
+      // try {
+      //   await this.createBulkObservationApi(payload);
+      // } catch (error) {
+      //   console.error('Error in createBulkObservationApi:', error);
+      // }
 
-      try {
-        await this.createBulkProcedureApi(payload);
-      } catch (error) {
-        console.error('Error in createBulkProcedureApi:', error);
-      }
+      // try {
+      //   await this.createBulkProcedureApi(payload);
+      // } catch (error) {
+      //   console.error('Error in createBulkProcedureApi:', error);
+      // }
 
-      try {
-        await this.updateBulkEncounterFinishedApi(
-          payload,
-          EncounterStatus.finished,
-        );
-      } catch (error) {
-        console.error('Error in updateBulkEncounterFinishedApi:', error);
-      }
+      // try {
+      //   await this.updateBulkEncounterFinishedApi(
+      //     payload,
+      //     EncounterStatus.finished,
+      //   );
+      // } catch (error) {
+      //   console.error('Error in updateBulkEncounterFinishedApi:', error);
+      // }
     }
   }
 
@@ -1419,7 +1438,17 @@ export class SubscribeService {
         const customer = await this.gqlRequestService.customer({
           id: interaction.customerId,
         });
-        console.log(customer);
+
+        if (!customer.ssPatientId) {
+          console.log('tidak ada');
+          const dataPatient = {
+            customer: customer,
+            clinic: interaction?.clinic,
+          };
+          // console.log(dataPatient);
+          await this.createPatientSatuSehat(dataPatient);
+        }
+
         if (
           interaction &&
           interaction?.ssEncounterId === null &&
@@ -1431,11 +1460,11 @@ export class SubscribeService {
         ) {
           const fullUrl =
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
-          const token = await this.generateTokenWithCache();
-          // const token2 = await this.generateTokenClinicWithCache(
-          //   interactions[0].clinic,
-          // );
-          console.log(token);
+          // const token = await this.generateTokenWithCache();
+          const token = await this.generateTokenClinicWithCache(
+            interaction[0]?.clinic,
+          );
+          console.log('ini token ', token);
           const headers = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -1492,18 +1521,18 @@ export class SubscribeService {
               },
             ],
             serviceProvider: {
-              // reference: `Organization/${interactions[0].clinic.ssOrganizationId}`,
-              reference: `Organization/${this.organizationId}`,
+              reference: `Organization/${interactions[0].clinic.ssOrganizationId}`,
+              // reference: `Organization/${this.organizationId}`,
             },
             identifier: [
               {
-                // system: `http://sys-ids.kemkes.go.id/encounter/${interactions[0].clinic.ssOrganizationId}`,
-                system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
-                value: `${interaction.id}`,
+                system: `http://sys-ids.kemkes.go.id/encounter/${interactions[0].clinic.ssOrganizationId}`,
+                // system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                // value: `${interaction.id}`,
               },
             ],
           };
-
+          console.log(data);
           try {
             const response = await axios.post(fullUrl, data, { headers });
             console.log(response);
@@ -2578,7 +2607,7 @@ export class SubscribeService {
       identifier: [
         {
           use: 'official',
-          system: `https://fhir.kemkes.go.id/id/${data.customer.identifierType == 'RESIDENT_ID' ? 'nik' : 'paspor'}`,
+          system: `https://fhir.kemkes.go.id/id/${data.customer.identifierType == 'RESIDENT_ID' || 1 ? 'nik' : 'paspor'}`,
           value: data.customer.identifierNo,
         },
       ],
@@ -2606,7 +2635,7 @@ export class SubscribeService {
           use: 'home',
         },
       ],
-      gender: data.customer.gender,
+      gender: data.customer.gender.toLowerCase(),
       birthDate: data.customer.birthdate,
       deceasedBoolean: false,
       address: [
@@ -2622,19 +2651,19 @@ export class SubscribeService {
               extension: [
                 {
                   url: 'province',
-                  valueCode: removeDot(data.customer.region.provinceCode),
+                  valueCode: `${removeDot(data.customer.region.provinceCode)}`,
                 },
                 {
                   url: 'city',
-                  valueCode: removeDot(data.customer.region.cityCode),
+                  valueCode: `${removeDot(data.customer.region.cityCode)}`,
                 },
                 {
                   url: 'district',
-                  valueCode: removeDot(data.customer.region.subdistrictCode),
+                  valueCode: `${removeDot(data.customer.region.subdistrictCode)}`,
                 },
                 {
                   url: 'village',
-                  valueCode: removeDot(data.customer.region.regionCode),
+                  valueCode: `${removeDot(data.customer.region.regionCode)}`,
                 },
                 {
                   url: 'rt',
@@ -2715,6 +2744,7 @@ export class SubscribeService {
       ],
     };
 
+    console.log(dataPatient);
     const fullUrl =
       this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Patient';
     try {
@@ -2726,11 +2756,11 @@ export class SubscribeService {
           ssPatientId: response?.data?.data?.patient_id,
         },
       });
-
+      await this.loggerService.logResponse(response?.data);
       return response?.data?.data?.patient_id;
     } catch (error) {
-      console.log('ini response errors', error.response?.data);
-      console.log('ini response errors', error.response?.data?.issue);
+      await this.loggerService.logError(error);
+      await this.loggerService.logAxiosError(error);
     }
   }
 
@@ -2797,6 +2827,110 @@ export class SubscribeService {
       const postConsent = await this.postConsentPatient(dataCustomer);
 
       return postConsent;
+    }
+  }
+
+  async createClinicBuilding(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ) {
+    const token = await this.generateTokenClinic(payload?.newData);
+
+    let unit = await this.gqlRequestService.unit({
+      id: payload.newData?.unitId,
+    });
+
+    if (!unit.address.regionId) {
+      throw new Error(
+        `Clinic with unit_id ${payload.newData?.unitId} region_id does not exist`,
+      );
+    }
+
+    const region = await this.gqlRequestService.region({
+      id: unit?.address.regionId,
+    });
+
+    const locationData = {
+      resourceType: 'Location',
+      status: 'active',
+      name: unit.name,
+      description: unit.name,
+      mode: 'instance',
+      telecom: [
+        {
+          system: 'phone',
+          value: unit.phone,
+          use: 'work',
+        },
+        {
+          system: 'email',
+          value: unit.email,
+          use: 'work',
+        },
+        {
+          system: 'url',
+          value: 'rata.id',
+          use: 'work',
+        },
+      ],
+      address: {
+        use: 'work',
+        line: [unit.address.address],
+        city: region.city,
+        postalCode: region.postcode,
+        country: 'ID',
+        extension: [
+          {
+            url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode',
+            extension: [
+              {
+                url: 'province',
+                valueCode: await this.cleanedString(region.provinceCode),
+              },
+              {
+                url: 'city',
+                valueCode: await this.cleanedString(region.cityCode),
+              },
+              {
+                url: 'district',
+                valueCode: await this.cleanedString(region.subdistrictCode),
+              },
+            ],
+          },
+        ],
+      },
+      physicalType: {
+        coding: [
+          {
+            system:
+              'http://terminology.hl7.org/CodeSystem/location-physical-type',
+            code: 'bu',
+            display: 'Building',
+          },
+        ],
+      },
+      managingOrganization: {
+        reference: '',
+      },
+    };
+
+    let url = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
+
+    try {
+      const response = await axios.post(url + 'Location', locationData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('reponse true ', response?.request?.issue);
+      await this.loggerService.logResponse(JSON.stringify(response));
+    } catch (error) {
+      console.log('reponse false ', error.response.data?.issue[0]);
+      await this.loggerService.logError(JSON.stringify(error?.response?.data));
+      if (!error?.response?.data) await this.loggerService.logAxiosError(error);
     }
   }
 }

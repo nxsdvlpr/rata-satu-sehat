@@ -1,0 +1,861 @@
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.19.00 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.19.01 WIB - undefined
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.20.29 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.20.29 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.21.56 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.21.57 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.23.08 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.23.08 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.41.13 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.41.13 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.42.10 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.42.10 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 13.54.15 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[RESPONSE] Selasa, 22 Oktober 2024 pukul 13.54.15 WIB - "f4798106-487d-493e-8800-730aaf927a4e"
+[ERROR] Selasa, 22 Oktober 2024 pukul 15.01.07 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[ERROR] Selasa, 22 Oktober 2024 pukul 15.03.48 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[ERROR] Selasa, 22 Oktober 2024 pukul 15.03.48 WIB - undefined
+[ERROR] Selasa, 22 Oktober 2024 pukul 15.05.06 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[AXIOS_ERROR] Selasa, 22 Oktober 2024 pukul 15.05.06 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer 5CCZKm2ZKqVYjyf8ULT3hDKOR5TU",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "873",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Location",
+    "data": "{\"resourceType\":\"Location\",\"status\":\"active\",\"name\":\"Klinik RATA PIK\",\"description\":\"Klinik RATA PIK\",\"mode\":\"instance\",\"telecom\":[{\"system\":\"phone\",\"value\":\"6281297087629\",\"use\":\"work\"},{\"system\":\"email\",\"value\":\"rata.clinic@app.com\",\"use\":\"work\"},{\"system\":\"url\",\"value\":\"rata.id\",\"use\":\"work\"}],\"address\":{\"use\":\"work\",\"line\":[\"The Centro Metro Broadway Blok A/43 Jl. Pantai Indah Utara 2,Penjaringan, Jakarta Utara.\"],\"city\":\"Jakarta Utara\",\"postalCode\":\"14460\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317201\"}]}]},\"physicalType\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/location-physical-type\",\"code\":\"bu\",\"display\":\"Building\"}]},\"managingOrganization\":{\"reference\":\"\"}}"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "text": {
+      "status": "generated"
+    },
+    "issue": [
+      {
+        "severity": "error",
+        "code": "duplicate",
+        "details": {
+          "text": "Found duplicate: Location"
+        }
+      }
+    ]
+  }
+}
+[ERROR] Selasa, 22 Oktober 2024 pukul 18.09.33 WIB - {"resourceType":"OperationOutcome","text":{"status":"generated"},"issue":[{"severity":"error","code":"duplicate","details":{"text":"Found duplicate: Location"}}]}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 14.02.09 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer bs40oMPDIXXe9qlUwOLtZITlDkEC",
+      "User-Agent": "axios/1.7.7",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient/?identifier=https://fhir.kemkes.go.id/id/nik|454544542211"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "issue": [
+      {
+        "severity": "error",
+        "code": "value",
+        "details": {
+          "text": "Invalid query"
+        },
+        "diagnostics": "Invalid identifier value"
+      }
+    ]
+  }
+}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 14.07.36 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer g8TibohTEFAMcOFpKJqUnhLAPbIU",
+      "User-Agent": "axios/1.7.7",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient/?identifier=https://fhir.kemkes.go.id/id/nik|454544542211"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "issue": [
+      {
+        "severity": "error",
+        "code": "value",
+        "details": {
+          "text": "Invalid query"
+        },
+        "diagnostics": "Invalid identifier value"
+      }
+    ]
+  }
+}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 14.14.23 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer uo9073wGlqgBphiLQyrMo8zhZOSR",
+      "User-Agent": "axios/1.7.7",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient/?identifier=https://fhir.kemkes.go.id/id/nik|454544542211"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "issue": [
+      {
+        "severity": "error",
+        "code": "value",
+        "details": {
+          "text": "Invalid query"
+        },
+        "diagnostics": "Invalid identifier value"
+      }
+    ]
+  }
+}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 14.15.25 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer yfNlOHrVcJnzdz5jTFu4M9dyVfhC",
+      "User-Agent": "axios/1.7.7",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient/?identifier=https://fhir.kemkes.go.id/id/nik|454544542211"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "issue": [
+      {
+        "severity": "error",
+        "code": "value",
+        "details": {
+          "text": "Invalid query"
+        },
+        "diagnostics": "Invalid identifier value"
+      }
+    ]
+  }
+}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 14.26.14 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer 6LGOGokLo2kIVGBcQpsTYDPDKTO2",
+      "User-Agent": "axios/1.7.7",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient/?identifier=https://fhir.kemkes.go.id/id/nik|454544542211"
+  },
+  "status": 400,
+  "data": {
+    "resourceType": "OperationOutcome",
+    "issue": [
+      {
+        "severity": "error",
+        "code": "value",
+        "details": {
+          "text": "Invalid query"
+        },
+        "diagnostics": "Invalid identifier value"
+      }
+    ]
+  }
+}
+[AXIOS_ERROR] Rabu, 23 Oktober 2024 pukul 17.51.03 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer njw5sA6EZSo0quIaqtCKj0pTzNhf",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1735",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":null}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"FEMALE\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Invalid identifiers",
+    "data": {
+      "use": "official",
+      "system": "https://fhir.kemkes.go.id/id/nik"
+    }
+  }
+}
+[ERROR] Rabu, 23 Oktober 2024 pukul 17.51.03 WIB - [object Object]
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 10.17.43 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer J4E5KGykldoMVX9rRG7HEPPN4IB7",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1735",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":null}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"FEMALE\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Invalid identifiers",
+    "data": {
+      "use": "official",
+      "system": "https://fhir.kemkes.go.id/id/nik"
+    }
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 10.17.43 WIB - [object Object]
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 10.21.11 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer 3s1GVSaS4nnNLk6unDM7sgvY7tAL",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1735",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":null}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"FEMALE\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Invalid identifiers",
+    "data": {
+      "use": "official",
+      "system": "https://fhir.kemkes.go.id/id/nik"
+    }
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 10.21.11 WIB - [object Object]
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 10.22.07 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer OOLbRBuGlEsjQ8ZjqxxyAH6qRbgy",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1735",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":null}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"FEMALE\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Invalid identifiers",
+    "data": {
+      "use": "official",
+      "system": "https://fhir.kemkes.go.id/id/nik"
+    }
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 10.22.07 WIB - [object Object]
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.04.18 WIB - Request failed with status code 400
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.05.18 WIB - Request failed with status code 400
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.06.49 WIB - Request failed with status code 400
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.08.38 WIB - AxiosError: Request failed with status code 400
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.10.35 WIB - AxiosError: Request failed with status code 400
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.11.34 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 13.11.34 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer dhlxGjfcolcz1TmVImQGWaGinuIO",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800033\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Failed to Create Patient",
+    "data": {
+      "success": false,
+      "message": "Failed to Create Patient on MPI",
+      "data": "document not saved"
+    }
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.12.51 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 13.12.51 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer prC9VUHUhyVOyltygWlzRzI6nmxp",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800033\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Failed to Create Patient",
+    "data": {
+      "success": false,
+      "message": "Failed to Create Patient on MPI",
+      "data": "document not saved"
+    }
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 13.17.49 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 13.17.49 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer Cc8LsA9tGV9VWAl9JD2VhLxuI7Eq",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800033\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Failed to Create Patient",
+    "data": {
+      "success": false,
+      "message": "Failed to Create Patient on MPI",
+      "data": "document not saved"
+    }
+  }
+}
+[RESPONSE] Kamis, 24 Oktober 2024 pukul 14.04.01 WIB - [object Object]
+[ERROR] Kamis, 24 Oktober 2024 pukul 14.06.55 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 14.06.55 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer 5PLgEtCyjS5QVeZWgf3EL8KNysqG",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800133\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Patient data exists. Search by name, birthdate and gender to get patient's id"
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 14.09.16 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 14.09.16 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer vSOXAnfe7qUcL92TZrAyGEVxeIGB",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800133\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Patient data exists. Search by name, birthdate and gender to get patient's id"
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 14.09.59 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 14.09.59 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer fKtTVH8Xw8TyGSgfmHEY6B5GiAII",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1749",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"3214042904800122\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Patient data exists. Search by name, birthdate and gender to get patient's id"
+  }
+}
+[ERROR] Kamis, 24 Oktober 2024 pukul 14.15.19 WIB - AxiosError: Request failed with status code 400
+[AXIOS_ERROR] Kamis, 24 Oktober 2024 pukul 14.15.19 WIB - {
+  "message": "Request failed with status code 400",
+  "code": "ERR_BAD_REQUEST",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer TTKSdANA5hrRAn8fvOV8StGZTnCJ",
+      "User-Agent": "axios/1.7.7",
+      "Content-Length": "1747",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "post",
+    "url": "https://api-satusehat-stg.dto.kemkes.go.id/fhir-r4/v1/Patient",
+    "data": "{\"resourceType\":\"Patient\",\"meta\":{\"profile\":[\"https://fhir.kemkes.go.id/r4/StructureDefinition/Patient\"]},\"identifier\":[{\"use\":\"official\",\"system\":\"https://fhir.kemkes.go.id/id/nik\",\"value\":\"11990023092091\"}],\"active\":true,\"name\":[{\"use\":\"official\",\"text\":\"Selny 1104\"}],\"telecom\":[{\"system\":\"phone\",\"value\":\"62811141104\",\"use\":\"mobile\"},{\"system\":\"phone\",\"value\":null,\"use\":\"home\"},{\"system\":\"email\",\"value\":\"selny_w@yahoo.com\",\"use\":\"home\"}],\"gender\":\"female\",\"birthDate\":\"1979-01-01\",\"deceasedBoolean\":false,\"address\":[{\"use\":\"home\",\"line\":[\"perumahan taman grisenda blok B1 no 29 jakut-14460\"],\"city\":\"DKI Jakarta\",\"postalCode\":\"14230\",\"country\":\"ID\",\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode\",\"extension\":[{\"url\":\"province\",\"valueCode\":\"31\"},{\"url\":\"city\",\"valueCode\":\"3172\"},{\"url\":\"district\",\"valueCode\":\"317203\"},{\"url\":\"village\",\"valueCode\":\"3172031006\"},{\"url\":\"rt\",\"valueCode\":\"0\"},{\"url\":\"rw\",\"valueCode\":\"0\"}]}]}],\"maritalStatus\":{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\"code\":\"M\",\"display\":\"Married\"}],\"text\":\"Married\"},\"multipleBirthInteger\":0,\"contact\":[{\"relationship\":[{\"coding\":[{\"system\":\"http://terminology.hl7.org/CodeSystem/v2-0131\",\"code\":\"C\"}]}],\"name\":{\"use\":\"official\",\"text\":\"Jane Smith\"},\"telecom\":[{\"system\":\"phone\",\"value\":\"0690383372\",\"use\":\"mobile\"}]}],\"communication\":[{\"language\":{\"coding\":[{\"system\":\"urn:ietf:bcp:47\",\"code\":\"id-ID\",\"display\":\"Indonesian\"}],\"text\":\"Indonesian\"},\"preferred\":true}],\"extension\":[{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace\",\"valueAddress\":{\"city\":\"Bandung\",\"country\":\"ID\"}},{\"url\":\"https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus\",\"valueCode\":\"WNI\"}]}"
+  },
+  "status": 400,
+  "data": {
+    "success": false,
+    "message": "Patient data exists. Search by name, birthdate and gender to get patient's id"
+  }
+}
