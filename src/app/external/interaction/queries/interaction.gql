@@ -23,6 +23,9 @@ query interaction($id: Cuid!) {
       ssOrganizationId
       ssClientId
       ssClientSecret
+      unit {
+        id
+      }
     }
     room {
       id

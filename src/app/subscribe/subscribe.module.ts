@@ -8,6 +8,7 @@ import { LoggerService } from './logger.service';
 import { RoomSubscriberSatuSehat } from './room/room.subscriber';
 import { StaffSubscriberSatuSehat } from './staff/staff.subscriber';
 import { SubscribeService } from './subscribe.service';
+import { TasksService } from './task.service';
 
 @Module({
   providers: [
@@ -19,7 +20,8 @@ import { SubscribeService } from './subscribe.service';
     InteractionSubscriberSatuSehat,
     CustomerConsentSubscriberSatuSehat,
     LoggerService,
+    TasksService,
   ],
-  exports: [SubscribeService, LoggerService],
+  exports: [SubscribeService, LoggerService, TasksService],
 })
 export class SubscribeModule {}

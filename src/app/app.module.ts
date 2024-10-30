@@ -3,6 +3,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { buildRmqConfigUri } from 'src/common/helpers';
 
@@ -32,6 +33,7 @@ import { SubscribeModule } from './subscribe/subscribe.module';
         },
       }),
     }),
+    ScheduleModule.forRoot(), // Initialize ScheduleModule
     GqlRequestModule,
     MigrationModule,
     ExampleModule,

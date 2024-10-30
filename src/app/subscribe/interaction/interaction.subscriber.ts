@@ -59,7 +59,7 @@ export class InteractionSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     console.log('medical.interaction.setStatus');
-    // console.log(payload.newData.clinicId);
+    // console.log(payload.newData);
     // const check = await this.checkClinicIdSatuSehat(payload.newData.clinicId);
     // console.log(check);
     const clinic = await this.subscribeService.clinic(payload.newData.clinicId);

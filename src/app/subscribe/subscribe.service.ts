@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
 import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
-import { removeDot } from 'src/common/helpers';
+import { JSONStringify, removeDot } from 'src/common/helpers';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 import { EncounterStatus } from 'src/constants/encounter';
 import { InteractionStatus } from 'src/constants/interaction';
@@ -101,11 +101,11 @@ export class SubscribeService {
 
   async generateTokenClinicWithCache(data: any): Promise<string> {
     const authUrl = this.config.get<string>('SATU_SEHAT_URL_AUTH');
-    console.log(data);
+
     const satuSehatToken: string = await this.cacheManager.get(
       'satu_sehat_auth_token',
     );
-    console.log(satuSehatToken);
+
     if (satuSehatToken === null || satuSehatToken === undefined) {
       const response = await axios.post(
         authUrl,
@@ -124,7 +124,7 @@ export class SubscribeService {
         'satu_sehat_auth_token',
         response.data.access_token,
       );
-      console.log(response.data.access_token);
+      await this.loggerService.logResponse(response.data.access_token);
       return response.data.access_token;
     }
 
@@ -1062,6 +1062,7 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
+    console.log(payload?.newData);
     const fullUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
 
     const practitioner = await this.gqlRequestService.staff({
@@ -1108,7 +1109,63 @@ export class SubscribeService {
     }
   }
 
+  async getPractitionerApi(
+    payload: RMQBasePayload,
+    request: any,
+    header?: any,
+  ): Promise<any> {
+    const fullUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
+
+    const practitioner = await this.gqlRequestService.staff({
+      id: payload.newData?.staffId,
+    });
+
+    const clinic = await this.gqlRequestService.clinic({
+      id: payload?.newData?.clinicId,
+    });
+
+    if (
+      practitioner.residentIdNo !== null &&
+      (practitioner.group === 'DOCTOR' || practitioner.group === 'NURSE') &&
+      practitioner.ssPractitionerId === null
+    ) {
+      try {
+        const token = await this.generateTokenClinic(clinic);
+        const response = await axios.get(
+          fullUrl +
+            'Practitioner/?identifier=https://fhir.kemkes.go.id/id/nik|' +
+            practitioner.residentIdNo,
+
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (
+          response.data.total > 0 &&
+          response.data.entry &&
+          response.data.entry.length > 0
+        ) {
+          const ihsPractitionerId = response.data.entry[0].resource.id;
+          await this.gqlRequestService.updateStaffWithoutRmq({
+            where: { id: payload.newData?.staffId },
+            data: {
+              ssPractitionerId: ihsPractitionerId,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        console.log(error.response.data);
+      }
+    }
+  }
+
   async createConditionApi(payload: RMQBasePayload): Promise<any> {
+    console.log(payload?.newData);
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       const emr = await this.gqlRequestService.emrByInteractionId({
         interactionId: payload.newData?.id,
@@ -1349,11 +1406,11 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    // console.log(payload.newData);
+    console.log(payload?.newData);
     const customer = await this.gqlRequestService.customer({
       id: payload?.newData?.customerId,
     });
-    // console.log(customer);
+
     if (!customer.ssPatientId) {
       const clinic = await this.gqlRequestService.clinic({
         id: payload?.newData?.clinicId,
@@ -1362,55 +1419,63 @@ export class SubscribeService {
         clinic: clinic,
         customer: customer,
       };
-      // console.log(dataPasient);
+
       await this.createPatientSatuSehat(dataPasient);
     }
 
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       try {
-        // await this.createBulkEncounterApi(payload);
+        await this.postStatusConsent(payload);
+        console.log('postStatusConsent completed');
+      } catch (error) {
+        console.error('Error in postStatusConsent:', error);
+      }
+
+      try {
+        await this.createBulkEncounterApi(payload);
         console.log('createBulkEncounterApi completed');
       } catch (error) {
         console.error('Error in createBulkEncounterApi:', error);
       }
 
-      // try {
-      //   await this.updateBulkEncounterOnHandlingApi(
-      //     payload,
-      //     EncounterStatus.inProgress,
-      //   );
-      //   console.log('updateBulkEncounterOnHandlingApi completed');
-      // } catch (error) {
-      //   console.error('Error in updateBulkEncounterOnHandlingApi:', error);
-      // }
+      try {
+        await this.updateBulkEncounterOnHandlingApi(
+          payload,
+          EncounterStatus.inProgress,
+        );
+        console.log('updateBulkEncounterOnHandlingApi completed');
+      } catch (error) {
+        console.error('Error in updateBulkEncounterOnHandlingApi:', error);
+      }
 
-      // try {
-      //   await this.createBulkConditionApi(payload);
-      //   console.log('createBulkConditionApi completed');
-      // } catch (error) {
-      //   console.error('Error in createBulkConditionApi:', error);
-      // }
+      try {
+        await this.createBulkConditionApi(payload);
+        console.log('createBulkConditionApi completed');
+      } catch (error) {
+        console.error('Error in createBulkConditionApi:', error);
+      }
 
-      // try {
-      //   await this.createBulkObservationApi(payload);
-      // } catch (error) {
-      //   console.error('Error in createBulkObservationApi:', error);
-      // }
+      try {
+        await this.createBulkObservationApi(payload);
+        console.log('createBulkObservationApi completed');
+      } catch (error) {
+        console.error('Error in createBulkObservationApi:', error);
+      }
 
-      // try {
-      //   await this.createBulkProcedureApi(payload);
-      // } catch (error) {
-      //   console.error('Error in createBulkProcedureApi:', error);
-      // }
+      try {
+        await this.createBulkProcedureApi(payload);
+      } catch (error) {
+        console.error('Error in createBulkProcedureApi:', error);
+      }
 
-      // try {
-      //   await this.updateBulkEncounterFinishedApi(
-      //     payload,
-      //     EncounterStatus.finished,
-      //   );
-      // } catch (error) {
-      //   console.error('Error in updateBulkEncounterFinishedApi:', error);
-      // }
+      try {
+        await this.updateBulkEncounterFinishedApi(
+          payload,
+          EncounterStatus.finished,
+        );
+      } catch (error) {
+        console.error('Error in updateBulkEncounterFinishedApi:', error);
+      }
     }
   }
 
@@ -1428,7 +1493,7 @@ export class SubscribeService {
         },
       },
     });
-    console.log('createBulkEncounterApi', interactions);
+
     if (interactions.length > 0) {
       for (const interaction of interactions) {
         const interactionLog = await this.gqlRequestService.interactionLog({
@@ -1438,16 +1503,6 @@ export class SubscribeService {
         const customer = await this.gqlRequestService.customer({
           id: interaction.customerId,
         });
-
-        if (!customer.ssPatientId) {
-          console.log('tidak ada');
-          const dataPatient = {
-            customer: customer,
-            clinic: interaction?.clinic,
-          };
-          // console.log(dataPatient);
-          await this.createPatientSatuSehat(dataPatient);
-        }
 
         if (
           interaction &&
@@ -1460,11 +1515,11 @@ export class SubscribeService {
         ) {
           const fullUrl =
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Encounter';
-          // const token = await this.generateTokenWithCache();
+
           const token = await this.generateTokenClinicWithCache(
-            interaction[0]?.clinic,
+            interaction.clinic,
           );
-          console.log('ini token ', token);
+
           const headers = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -1522,27 +1577,28 @@ export class SubscribeService {
             ],
             serviceProvider: {
               reference: `Organization/${interactions[0].clinic.ssOrganizationId}`,
-              // reference: `Organization/${this.organizationId}`,
             },
             identifier: [
               {
                 system: `http://sys-ids.kemkes.go.id/encounter/${interactions[0].clinic.ssOrganizationId}`,
-                // system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
-                // value: `${interaction.id}`,
+                value: `${interaction.id}`,
               },
             ],
           };
-          console.log(data);
+
           try {
             const response = await axios.post(fullUrl, data, { headers });
-            console.log(response);
+
             await this.gqlRequestService.updateInteractionWithoutRmq({
               where: { id: interaction.id },
               data: {
                 ssEncounterId: response.data.id,
               },
             });
+
+            await this.loggerService.logResponse(response?.data[0]);
           } catch (error) {
+            await this.loggerService.logError(error?.response?.data[0]);
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1559,6 +1615,8 @@ export class SubscribeService {
     payload: RMQBasePayload,
     status: string,
   ): Promise<any> {
+    // console.log('updateBulkEncounterOnHandlingApi ', payload.newData);
+
     const interactions = await this.gqlRequestService.interactions({
       where: {
         customerId: {
@@ -1615,9 +1673,14 @@ export class SubscribeService {
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
             'Encounter/' +
             `${interaction?.ssEncounterId}`;
+
+          const token = await this.generateTokenClinicWithCache(
+            interaction.clinic,
+          );
+
           const headers = {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${await this.generateTokenWithCache()}`,
+            Authorization: `Bearer ${token}`,
           };
           const data = {
             resourceType: 'Encounter',
@@ -1666,11 +1729,11 @@ export class SubscribeService {
             ],
             statusHistory: statusHistory,
             serviceProvider: {
-              reference: `Organization/${this.organizationId}`,
+              reference: `Organization/${interaction.clinic.ssOrganizationId}`,
             },
             identifier: [
               {
-                system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                system: `http://sys-ids.kemkes.go.id/encounter/${interaction.clinic.ssOrganizationId}`,
                 value: `${interaction.id}`,
               },
             ],
@@ -1683,7 +1746,10 @@ export class SubscribeService {
                 ssEncounterId: response.data.id,
               },
             });
+            console.log(response.data.id);
+            await this.loggerService.logResponse(response?.data[0]);
           } catch (error) {
+            await this.loggerService.logError(error?.response?.data[0]);
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1757,10 +1823,16 @@ export class SubscribeService {
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
             'Encounter/' +
             `${interaction?.ssEncounterId}`;
+
+          const token = await this.generateTokenClinicWithCache(
+            interaction.clinic,
+          );
+
           const headers = {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${await this.generateTokenWithCache()}`,
+            Authorization: `Bearer ${token}`,
           };
+
           const data = {
             resourceType: 'Encounter',
             id: `${interaction?.ssEncounterId}`,
@@ -1815,11 +1887,11 @@ export class SubscribeService {
             ],
             statusHistory: statusHistory,
             serviceProvider: {
-              reference: `Organization/${this.organizationId}`,
+              reference: `Organization/${interaction.clinic.ssOrganizationId}`,
             },
             identifier: [
               {
-                system: `http://sys-ids.kemkes.go.id/encounter/${this.organizationId}`,
+                system: `http://sys-ids.kemkes.go.id/encounter/${interaction.clinic.ssOrganizationId}`,
                 value: `${interaction.id}`,
               },
             ],
@@ -1832,7 +1904,9 @@ export class SubscribeService {
                 ssEncounterId: response.data.id,
               },
             });
+            await this.loggerService.logResponse(response?.data[0]);
           } catch (error) {
+            await this.loggerService.logError(error?.response?.data[0]);
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1889,9 +1963,14 @@ export class SubscribeService {
 
           const fullUrl =
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Condition';
+
+          const token = await this.generateTokenClinicWithCache(
+            interaction.clinic,
+          );
+
           const headers = {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${await this.generateTokenWithCache()}`,
+            Authorization: `Bearer ${token}`,
           };
           const data = {
             resourceType: 'Condition',
@@ -1933,6 +2012,9 @@ export class SubscribeService {
 
           try {
             const response = await axios.post(fullUrl, data, { headers });
+
+            await this.loggerService.logResponse(response?.data[0]);
+            console.log('ini id condition ', response.data.id);
             let ssConditionIds = interaction?.emr.ssConditionIds || [];
 
             if (!Array.isArray(ssConditionIds)) {
@@ -1951,6 +2033,7 @@ export class SubscribeService {
               },
             });
           } catch (error) {
+            await this.loggerService.logError(error?.response?.data[0]);
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -2034,9 +2117,14 @@ export class SubscribeService {
             const fullUrl =
               this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
               'Observation';
+
+            const token = await this.generateTokenClinicWithCache(
+              interaction.clinic,
+            );
+
             const headers = {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${await this.generateTokenWithCache()}`,
+              Authorization: `Bearer ${token}`,
             };
             const data = {
               resourceType: 'Observation',
@@ -2099,7 +2187,9 @@ export class SubscribeService {
                   ssObservationIds: ssObservationIds,
                 },
               });
+              await this.loggerService.logResponse(response?.data);
             } catch (error) {
+              await this.loggerService.logError(error);
               console.log('error');
               console.log(interaction.id);
               console.log(error.response.data);
@@ -2153,9 +2243,14 @@ export class SubscribeService {
           if (codingArray.flat().length !== 0) {
             const fullUrl =
               this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Procedure';
+
+            const token = await this.generateTokenClinicWithCache(
+              interaction.clinic,
+            );
+
             const headers = {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${await this.generateTokenWithCache()}`,
+              Authorization: `Bearer ${token}`,
             };
             const data = {
               resourceType: 'Procedure',
@@ -2198,7 +2293,9 @@ export class SubscribeService {
                   ssProcedureIds: ssProcedureIds,
                 },
               });
+              await this.loggerService.logResponse(response?.data[0]);
             } catch (error) {
+              await this.loggerService.logError(error?.response?.data[0]);
               console.log('error');
               console.log(interaction.id);
               console.log(error.response.data);
@@ -2593,7 +2690,7 @@ export class SubscribeService {
 
   async createPatientSatuSehat(data?: any): Promise<any> {
     const token = await this.generateTokenClinic(data?.clinic);
-
+    console.log('ini token', token);
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -2745,6 +2842,7 @@ export class SubscribeService {
     };
 
     console.log(dataPatient);
+    await this.loggerService.logError(JSONStringify(dataPatient));
     const fullUrl =
       this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Patient';
     try {
@@ -2759,8 +2857,47 @@ export class SubscribeService {
       await this.loggerService.logResponse(response?.data);
       return response?.data?.data?.patient_id;
     } catch (error) {
-      await this.loggerService.logError(error);
+      console.log('ini error log ', error);
+      console.log('ini error log ', error.response);
+      await this.loggerService.logError(error.response);
       await this.loggerService.logAxiosError(error);
+    }
+  }
+
+  async postStatusConsent(payload: RMQBasePayload): Promise<any> {
+    const clinic = await this.gqlRequestService.clinic({
+      id: payload?.newData?.clinicId,
+    });
+    const customer = await this.gqlRequestService.customer({
+      id: payload?.newData?.customerId,
+    });
+
+    const staff = await this.gqlRequestService.staff({
+      id: payload?.newData?.staffId,
+    });
+
+    const token = await this.generateTokenClinic(clinic);
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const dataConsent = {
+      patient_id: customer.ssPatientId,
+      action: `${customer?.satusehatConsentStatus === 'YES' ? 'OPTIN' : 'OPTOUT'}`,
+      agent: `${staff.name} ${clinic?.unit?.name}`,
+    };
+
+    const fullUrl = this.config.get<string>('SATU_SEHAT_URL_CONSENT');
+
+    try {
+      const response = await axios.post(fullUrl, dataConsent, { headers });
+
+      await this.loggerService.logResponse(response?.data?.status);
+    } catch (error) {
+      console.log(error.response?.data?.issue[0]);
+      await this.loggerService.logError(error.response?.data?.issue[0]);
     }
   }
 

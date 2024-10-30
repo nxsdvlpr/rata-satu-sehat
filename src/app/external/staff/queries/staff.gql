@@ -4,5 +4,6 @@ query staff($id: Cuid!) {
     residentIdNo
     group
     ssPractitionerId
+    name
   }
 }

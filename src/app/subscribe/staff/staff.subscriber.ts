@@ -46,4 +46,21 @@ export class StaffSubscriberSatuSehat {
       console.log(error);
     }
   }
+
+  @RabbitSubscribe({
+    exchange: 'rata.medical',
+    routingKey: 'medical.clinicStaff.created',
+  })
+  async createClinicStaff(
+    @RabbitPayload() payload: RMQBasePayload,
+    @RabbitRequest() request: any,
+    @RabbitHeader() header: any,
+  ) {
+    try {
+      console.log('medical.clinicStaff.created');
+      this.subscribeService.getPractitionerApi(payload, request, header);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
