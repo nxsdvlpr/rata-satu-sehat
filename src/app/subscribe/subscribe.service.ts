@@ -1524,6 +1524,7 @@ export class SubscribeService {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           };
+
           const data = {
             resourceType: 'Encounter',
             status: 'arrived',
@@ -1596,9 +1597,13 @@ export class SubscribeService {
               },
             });
 
-            await this.loggerService.logResponse(response?.data[0]);
+            await this.loggerService.logResponse(
+              `response createBulkEncounterApi , ${response?.data[0]}`,
+            );
           } catch (error) {
-            await this.loggerService.logError(error?.response?.data[0]);
+            await this.loggerService.logError(
+              `error createBulkEncounterApi, ${error?.response?.data[0]}`,
+            );
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1615,8 +1620,6 @@ export class SubscribeService {
     payload: RMQBasePayload,
     status: string,
   ): Promise<any> {
-    // console.log('updateBulkEncounterOnHandlingApi ', payload.newData);
-
     const interactions = await this.gqlRequestService.interactions({
       where: {
         customerId: {
@@ -1667,8 +1670,6 @@ export class SubscribeService {
           interactionLog &&
           interactionLog.startAt !== null
         ) {
-          console.log('update encounter on handling');
-          console.log(interaction.id);
           const fullUrl =
             this.config.get<string>('SATU_SEHAT_URL_RESOURCE') +
             'Encounter/' +
@@ -1747,9 +1748,13 @@ export class SubscribeService {
               },
             });
             console.log(response.data.id);
-            await this.loggerService.logResponse(response?.data[0]);
+            await this.loggerService.logResponse(
+              `response updateBulkEncounterOnHandlingApi, ${response?.data[0]}`,
+            );
           } catch (error) {
-            await this.loggerService.logError(error?.response?.data[0]);
+            await this.loggerService.logError(
+              `error updateBulkEncounterOnHandlingApi, ${error?.response?.data[0]}`,
+            );
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1896,6 +1901,7 @@ export class SubscribeService {
               },
             ],
           };
+
           try {
             const response = await axios.put(fullUrl, data, { headers });
             await this.gqlRequestService.updateInteractionWithoutRmq({
@@ -1904,9 +1910,13 @@ export class SubscribeService {
                 ssEncounterId: response.data.id,
               },
             });
-            await this.loggerService.logResponse(response?.data[0]);
+            await this.loggerService.logResponse(
+              `response createBulkProcedureApi, ${response?.data[0]}`,
+            );
           } catch (error) {
-            await this.loggerService.logError(error?.response?.data[0]);
+            await this.loggerService.logError(
+              `error createBulkProcedureApi , ${error?.response?.data[0]}`,
+            );
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -1972,6 +1982,7 @@ export class SubscribeService {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           };
+
           const data = {
             resourceType: 'Condition',
             clinicalStatus: {
@@ -2013,7 +2024,9 @@ export class SubscribeService {
           try {
             const response = await axios.post(fullUrl, data, { headers });
 
-            await this.loggerService.logResponse(response?.data[0]);
+            await this.loggerService.logResponse(
+              `response createBulkConditionApi, ${response?.data[0]}`,
+            );
             console.log('ini id condition ', response.data.id);
             let ssConditionIds = interaction?.emr.ssConditionIds || [];
 
@@ -2033,7 +2046,9 @@ export class SubscribeService {
               },
             });
           } catch (error) {
-            await this.loggerService.logError(error?.response?.data[0]);
+            await this.loggerService.logError(
+              `error createBulkConditionApi , ${error?.response?.data[0]}`,
+            );
             console.log('error');
             console.log(interaction.id);
             console.log(error.response.data);
@@ -2126,6 +2141,7 @@ export class SubscribeService {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             };
+
             const data = {
               resourceType: 'Observation',
               status: 'final',
@@ -2187,9 +2203,13 @@ export class SubscribeService {
                   ssObservationIds: ssObservationIds,
                 },
               });
-              await this.loggerService.logResponse(response?.data);
+              await this.loggerService.logResponse(
+                `response createBulkObservationApi , ${response?.data}`,
+              );
             } catch (error) {
-              await this.loggerService.logError(error);
+              await this.loggerService.logError(
+                `error createBulkObservationApi ,${error}`,
+              );
               console.log('error');
               console.log(interaction.id);
               console.log(error.response.data);
@@ -2252,6 +2272,7 @@ export class SubscribeService {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             };
+
             const data = {
               resourceType: 'Procedure',
               status: 'completed',
@@ -2293,9 +2314,13 @@ export class SubscribeService {
                   ssProcedureIds: ssProcedureIds,
                 },
               });
-              await this.loggerService.logResponse(response?.data[0]);
+              await this.loggerService.logResponse(
+                `response createBulkProcedureApi , ${response?.data[0]}`,
+              );
             } catch (error) {
-              await this.loggerService.logError(error?.response?.data[0]);
+              await this.loggerService.logError(
+                `error createBulkProcedureApi , ${error?.response?.data[0]}`,
+              );
               console.log('error');
               console.log(interaction.id);
               console.log(error.response.data);
@@ -2690,7 +2715,7 @@ export class SubscribeService {
 
   async createPatientSatuSehat(data?: any): Promise<any> {
     const token = await this.generateTokenClinic(data?.clinic);
-    console.log('ini token', token);
+
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -2841,8 +2866,9 @@ export class SubscribeService {
       ],
     };
 
-    console.log(dataPatient);
-    await this.loggerService.logError(JSONStringify(dataPatient));
+    await this.loggerService.logError(
+      `create pasient satu sehat ,${JSONStringify(dataPatient)}`,
+    );
     const fullUrl =
       this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Patient';
     try {
@@ -2894,10 +2920,14 @@ export class SubscribeService {
     try {
       const response = await axios.post(fullUrl, dataConsent, { headers });
 
-      await this.loggerService.logResponse(response?.data?.status);
+      await this.loggerService.logResponse(
+        `reponse post customer consent , ${response?.data?.status}`,
+      );
     } catch (error) {
       console.log(error.response?.data?.issue[0]);
-      await this.loggerService.logError(error.response?.data?.issue[0]);
+      await this.loggerService.logError(
+        `error post customer consent ' ${error.response?.data?.issue[0]}`,
+      );
     }
   }
 
