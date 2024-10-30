@@ -2019,3 +2019,18 @@
 [ERROR] Rabu, 30 Oktober 2024 pukul 13.44.01 WIB - undefined
 [RESPONSE] Rabu, 30 Oktober 2024 pukul 13.45.02 WIB - active
 [ERROR] Rabu, 30 Oktober 2024 pukul 13.45.02 WIB - undefined
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.02.02 WIB - reponse post customer consent , active
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.02.02 WIB - QKnML0OavdOHrufAC6crP3E8z5FQ
+[ERROR] Rabu, 30 Oktober 2024 pukul 14.02.04 WIB - error createBulkEncounterApi, undefined
+[ERROR] Rabu, 30 Oktober 2024 pukul 14.03.01 WIB - error post customer consent ' [object Object]
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.04.01 WIB - reponse post customer consent , active
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.01 WIB - reponse post customer consent , active
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.02 WIB - response createBulkEncounterApi , undefined
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.03 WIB - response createBulkConditionApi, undefined
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.03 WIB - response createBulkObservationApi , [object Object]
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.04 WIB - response createBulkObservationApi , [object Object]
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.04 WIB - response createBulkObservationApi , [object Object]
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.05.05 WIB - response createBulkProcedureApi , undefined
+[ERROR] Rabu, 30 Oktober 2024 pukul 14.06.01 WIB - error post customer consent ' [object Object]
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.07.00 WIB - reponse post customer consent , active
+[RESPONSE] Rabu, 30 Oktober 2024 pukul 14.10.01 WIB - reponse post customer consent , active
