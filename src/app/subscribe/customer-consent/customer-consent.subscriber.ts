@@ -12,7 +12,7 @@ import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 import { LoggerService } from '../logger.service';
 
 @Injectable()
-export class CustomerSubscriberSatuSehat {
+export class CustomerConsentSubscriberSatuSehat {
   constructor(
     private subscribeService: SubscribeService,
     private loggerService: LoggerService,
@@ -20,31 +20,15 @@ export class CustomerSubscriberSatuSehat {
 
   @RabbitSubscribe({
     exchange: 'rata.customer',
-    routingKey: 'customer.customer.created',
+    routingKey: 'customer.customer.satusehatSettled',
   })
-  async onCustomerCreated(
+  async onCustomerConsentCreated(
     @RabbitPayload() payload: RMQBasePayload,
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
     try {
-      this.subscribeService.checkPatientApi(payload, request, header);
-    } catch (error) {
-      this.loggerService.logError(error);
-    }
-  }
-
-  @RabbitSubscribe({
-    exchange: 'rata.customer',
-    routingKey: 'customer.customer.updated',
-  })
-  async onCustomerUpdated(
-    @RabbitPayload() payload: RMQBasePayload,
-    @RabbitRequest() request: any,
-    @RabbitHeader() header: any,
-  ) {
-    try {
-      this.subscribeService.checkPatientApi(payload, request, header);
+      await this.subscribeService.customerConsentPost(payload?.data);
     } catch (error) {
       this.loggerService.logError(error);
     }

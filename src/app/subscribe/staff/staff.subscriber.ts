@@ -9,9 +9,14 @@ import { Injectable } from '@nestjs/common';
 import { SubscribeService } from 'src/app/subscribe/subscribe.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
+import { LoggerService } from '../logger.service';
+
 @Injectable()
 export class StaffSubscriberSatuSehat {
-  constructor(private subscribeService: SubscribeService) {}
+  constructor(
+    private subscribeService: SubscribeService,
+    private loggerService: LoggerService,
+  ) {}
 
   @RabbitSubscribe({
     exchange: 'rata.medical',
@@ -23,10 +28,9 @@ export class StaffSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('medical.staff.created');
       this.subscribeService.checkPractitionerApi(payload, request, header);
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 
@@ -40,10 +44,25 @@ export class StaffSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('medical.staff.updated');
       this.subscribeService.checkPractitionerApi(payload, request, header);
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
+    }
+  }
+
+  @RabbitSubscribe({
+    exchange: 'rata.medical',
+    routingKey: 'medical.clinicStaff.created',
+  })
+  async createClinicStaff(
+    @RabbitPayload() payload: RMQBasePayload,
+    @RabbitRequest() request: any,
+    @RabbitHeader() header: any,
+  ) {
+    try {
+      this.subscribeService.getPractitionerApi(payload, request, header);
+    } catch (error) {
+      this.loggerService.logError(error);
     }
   }
 }

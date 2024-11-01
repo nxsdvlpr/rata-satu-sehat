@@ -40,6 +40,9 @@ query interactions(
         ssOrganizationId
         ssClientId
         ssClientSecret
+        unit {
+          id
+        }
       }
       room {
         id

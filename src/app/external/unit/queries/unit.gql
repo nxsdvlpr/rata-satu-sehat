@@ -30,6 +30,8 @@ query unit($id: Cuid!) {
       unitId
       ssOrganizationId
       ssLocationId
+      ssClientId
+      ssClientSecret
     }
   }
 }
