@@ -2034,3 +2034,7 @@
 [ERROR] Rabu, 30 Oktober 2024 pukul 14.06.01 WIB - error post customer consent ' [object Object]
 [RESPONSE] Rabu, 30 Oktober 2024 pukul 14.07.00 WIB - reponse post customer consent , active
 [RESPONSE] Rabu, 30 Oktober 2024 pukul 14.10.01 WIB - reponse post customer consent , active
+[RESPONSE] Jumat, 01 November 2024 pukul 17.27.20 WIB - [object Object]
+[RESPONSE] Jumat, 01 November 2024 pukul 17.29.01 WIB - undefined
+[RESPONSE] Jumat, 01 November 2024 pukul 17.30.09 WIB - [object Object]
+[ERROR] Jumat, 01 November 2024 pukul 17.30.50 WIB - AxiosError: Request failed with status code 429

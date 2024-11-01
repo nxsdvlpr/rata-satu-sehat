@@ -42,7 +42,7 @@ export class SubscribeService {
         },
       },
     );
-    // console.log('ini token ', response.data.access_token);
+
     return response.data.access_token;
   }
 
@@ -92,7 +92,7 @@ export class SubscribeService {
         'satu_sehat_auth_token',
         response.data.access_token,
       );
-      // console.log('ini token ', response, ' ', satuSehatToken);
+
       return response.data.access_token;
     }
 
@@ -162,14 +162,10 @@ export class SubscribeService {
       try {
         await this.createLocationApi(token, clinicId, locationData);
       } catch (error) {
-        console.log('Error creating location for clinic id:', clinicId);
-        //console.log(error);
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     } catch (error) {
-      console.log('Error creating organization for clinic id:', clinicId);
-      //console.log(error);
-      console.log(error.response.data);
+      this.loggerService.logError(error);
     }
   }
 
@@ -179,8 +175,7 @@ export class SubscribeService {
     locationData: any,
   ): Promise<void> {
     const locationUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
-    // console.log("clinic " + clinicId)
-    // console.log(locationData)
+
     try {
       const response = await axios.post(
         locationUrl + 'Location',
@@ -193,7 +188,7 @@ export class SubscribeService {
         },
       );
 
-      console.log(locationData.physicalType.coding[0].display);
+      this.loggerService.logResponse(response?.data);
 
       if (locationData.physicalType.coding[0].display === 'Room') {
         await this.gqlRequestService.updateRoomWithoutRmq({
@@ -213,8 +208,7 @@ export class SubscribeService {
         });
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data);
+      this.loggerService.logError(error);
     }
   }
 
@@ -249,14 +243,10 @@ export class SubscribeService {
       try {
         await this.updateLocationApi(token, clinicId, locationData);
       } catch (error) {
-        console.log('Error creating location for clinic id:', clinicId);
-        //console.log(error);
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     } catch (error) {
-      console.log('Error creating organization for clinic id:', clinicId);
-      //console.log(error);
-      console.log(error.response.data);
+      this.loggerService.logError(error);
     }
   }
 
@@ -278,7 +268,7 @@ export class SubscribeService {
         },
       );
 
-      console.log(locationData.physicalType.coding[0].display);
+      this.loggerService.logResponse(response?.data);
 
       if (locationData.physicalType.coding[0].display === 'Room') {
         await this.gqlRequestService.updateRoomWithoutRmq({
@@ -298,8 +288,7 @@ export class SubscribeService {
         });
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data);
+      this.loggerService.logError(error);
     }
   }
 
@@ -312,9 +301,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    // console.log("clinic.created")
-    // console.log(payload)
-
     const clinic = await this.gqlRequestService.clinic({
       id: payload.newData?.id,
     });
@@ -482,9 +468,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    // console.log("clinic.created")
-    // console.log(payload)
-
     const unit = await this.gqlRequestService.unit({
       id: payload.newData?.id,
     });
@@ -651,15 +634,10 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    //console.log("clinic.updated")
-
     try {
-      //console.log(payload)
       const unit = await this.gqlRequestService.unit({
         id: payload.newData?.id,
       });
-
-      //console.log(unit)
 
       if (!unit.clinic) {
         throw new Error(
@@ -829,7 +807,7 @@ export class SubscribeService {
         locationData,
       );
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 
@@ -838,8 +816,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    //console.log("location.created")
-
     const room = await this.gqlRequestService.room({
       id: payload.newData?.id,
     });
@@ -927,8 +903,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    //console.log("location.updated")
-
     const room = await this.gqlRequestService.room({
       id: payload.newData?.id,
     });
@@ -1023,7 +997,7 @@ export class SubscribeService {
     const customer = await this.gqlRequestService.customer({
       id: payload.newData?.id,
     });
-    console.log(payload.newData);
+
     if (customer?.identifierNo !== null && customer?.ssPatientId === null) {
       try {
         const response = await axios.get(
@@ -1062,7 +1036,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    console.log(payload?.newData);
     const fullUrl = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
 
     const practitioner = await this.gqlRequestService.staff({
@@ -1103,8 +1076,7 @@ export class SubscribeService {
           });
         }
       } catch (error) {
-        console.log(error);
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     }
   }
@@ -1158,14 +1130,12 @@ export class SubscribeService {
           });
         }
       } catch (error) {
-        console.log(error);
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     }
   }
 
   async createConditionApi(payload: RMQBasePayload): Promise<any> {
-    console.log(payload?.newData);
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       const emr = await this.gqlRequestService.emrByInteractionId({
         interactionId: payload.newData?.id,
@@ -1258,7 +1228,7 @@ export class SubscribeService {
             },
           });
         } catch (error) {
-          console.log(error);
+          this.loggerService.logError(error);
         }
       }
     }
@@ -1340,10 +1310,10 @@ export class SubscribeService {
           };
           try {
             const response = await axios.put(fullUrl, data, { headers });
-            console.log(response);
+
+            this.loggerService.logResponse(response?.data);
           } catch (error) {
-            console.log(error);
-            console.log(error.response.data);
+            this.loggerService.logError(error);
           }
         }
       }
@@ -1406,7 +1376,6 @@ export class SubscribeService {
     request: any,
     header?: any,
   ): Promise<any> {
-    console.log(payload?.newData);
     const customer = await this.gqlRequestService.customer({
       id: payload?.newData?.customerId,
     });
@@ -1426,16 +1395,14 @@ export class SubscribeService {
     if (payload.newData.status === InteractionStatus.HANDLING_DONE) {
       try {
         await this.postStatusConsent(payload);
-        console.log('postStatusConsent completed');
       } catch (error) {
-        console.error('Error in postStatusConsent:', error);
+        this.loggerService.logError(error);
       }
 
       try {
         await this.createBulkEncounterApi(payload);
-        console.log('createBulkEncounterApi completed');
       } catch (error) {
-        console.error('Error in createBulkEncounterApi:', error);
+        this.loggerService.logError(error);
       }
 
       try {
@@ -1443,29 +1410,26 @@ export class SubscribeService {
           payload,
           EncounterStatus.inProgress,
         );
-        console.log('updateBulkEncounterOnHandlingApi completed');
       } catch (error) {
-        console.error('Error in updateBulkEncounterOnHandlingApi:', error);
+        this.loggerService.logError(error);
       }
 
       try {
         await this.createBulkConditionApi(payload);
-        console.log('createBulkConditionApi completed');
       } catch (error) {
-        console.error('Error in createBulkConditionApi:', error);
+        this.loggerService.logError(error);
       }
 
       try {
         await this.createBulkObservationApi(payload);
-        console.log('createBulkObservationApi completed');
       } catch (error) {
-        console.error('Error in createBulkObservationApi:', error);
+        this.loggerService.logError(error);
       }
 
       try {
         await this.createBulkProcedureApi(payload);
       } catch (error) {
-        console.error('Error in createBulkProcedureApi:', error);
+        this.loggerService.logError(error);
       }
 
       try {
@@ -1474,7 +1438,7 @@ export class SubscribeService {
           EncounterStatus.finished,
         );
       } catch (error) {
-        console.error('Error in updateBulkEncounterFinishedApi:', error);
+        this.loggerService.logError(error);
       }
     }
   }
@@ -1604,12 +1568,6 @@ export class SubscribeService {
             await this.loggerService.logError(
               `error createBulkEncounterApi, ${error?.response?.data[0]}`,
             );
-            console.log('error');
-            console.log(interaction.id);
-            console.log(error.response.data);
-            error.response.data.issue.map((item) => {
-              console.log(item);
-            });
           }
         }
       }
@@ -1747,7 +1705,6 @@ export class SubscribeService {
                 ssEncounterId: response.data.id,
               },
             });
-            console.log(response.data.id);
             await this.loggerService.logResponse(
               `response updateBulkEncounterOnHandlingApi, ${response?.data[0]}`,
             );
@@ -1755,12 +1712,6 @@ export class SubscribeService {
             await this.loggerService.logError(
               `error updateBulkEncounterOnHandlingApi, ${error?.response?.data[0]}`,
             );
-            console.log('error');
-            console.log(interaction.id);
-            console.log(error.response.data);
-            error.response.data.issue.map((item) => {
-              console.log(item);
-            });
           }
         }
       }
@@ -1917,12 +1868,6 @@ export class SubscribeService {
             await this.loggerService.logError(
               `error createBulkProcedureApi , ${error?.response?.data[0]}`,
             );
-            console.log('error');
-            console.log(interaction.id);
-            console.log(error.response.data);
-            error.response.data.issue.map((item) => {
-              console.log(item);
-            });
           }
         }
       }
@@ -2027,7 +1972,7 @@ export class SubscribeService {
             await this.loggerService.logResponse(
               `response createBulkConditionApi, ${response?.data[0]}`,
             );
-            console.log('ini id condition ', response.data.id);
+
             let ssConditionIds = interaction?.emr.ssConditionIds || [];
 
             if (!Array.isArray(ssConditionIds)) {
@@ -2049,12 +1994,6 @@ export class SubscribeService {
             await this.loggerService.logError(
               `error createBulkConditionApi , ${error?.response?.data[0]}`,
             );
-            console.log('error');
-            console.log(interaction.id);
-            console.log(error.response.data);
-            error.response.data.issue.map((item) => {
-              console.log(item);
-            });
           }
         }
       }
@@ -2210,12 +2149,6 @@ export class SubscribeService {
               await this.loggerService.logError(
                 `error createBulkObservationApi ,${error}`,
               );
-              console.log('error');
-              console.log(interaction.id);
-              console.log(error.response.data);
-              error.response.data.issue.map((item) => {
-                console.log(item);
-              });
             }
           }
         }
@@ -2321,12 +2254,6 @@ export class SubscribeService {
               await this.loggerService.logError(
                 `error createBulkProcedureApi , ${error?.response?.data[0]}`,
               );
-              console.log('error');
-              console.log(interaction.id);
-              console.log(error.response.data);
-              error.response.data.issue.map((item) => {
-                console.log(item);
-              });
             }
           }
         }
@@ -2434,8 +2361,9 @@ export class SubscribeService {
             ssEncounterId: response.data.id,
           },
         });
+        this.loggerService.logResponse(response?.data);
       } catch (error) {
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     }
   }
@@ -2559,8 +2487,9 @@ export class SubscribeService {
             ssEncounterId: response.data.id,
           },
         });
+        this.loggerService.logResponse(response?.data);
       } catch (error) {
-        console.log(error.response.data);
+        this.loggerService.logError(error);
       }
     }
   }
@@ -2698,7 +2627,7 @@ export class SubscribeService {
               },
             });
           } catch (error) {
-            console.log(error.response?.data);
+            this.loggerService.logError(error);
           }
         }
       }
@@ -2787,83 +2716,12 @@ export class SubscribeService {
                   url: 'village',
                   valueCode: `${removeDot(data.customer.region.regionCode)}`,
                 },
-                {
-                  url: 'rt',
-                  valueCode: '0',
-                },
-                {
-                  url: 'rw',
-                  valueCode: '0',
-                },
               ],
             },
           ],
         },
       ],
-      maritalStatus: {
-        coding: [
-          {
-            system: 'http://terminology.hl7.org/CodeSystem/v3-MaritalStatus',
-            code: 'M',
-            display: 'Married',
-          },
-        ],
-        text: 'Married',
-      },
       multipleBirthInteger: 0,
-      contact: [
-        {
-          relationship: [
-            {
-              coding: [
-                {
-                  system: 'http://terminology.hl7.org/CodeSystem/v2-0131',
-                  code: 'C',
-                },
-              ],
-            },
-          ],
-          name: {
-            use: 'official',
-            text: 'Jane Smith',
-          },
-          telecom: [
-            {
-              system: 'phone',
-              value: '0690383372',
-              use: 'mobile',
-            },
-          ],
-        },
-      ],
-      communication: [
-        {
-          language: {
-            coding: [
-              {
-                system: 'urn:ietf:bcp:47',
-                code: 'id-ID',
-                display: 'Indonesian',
-              },
-            ],
-            text: 'Indonesian',
-          },
-          preferred: true,
-        },
-      ],
-      extension: [
-        {
-          url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/birthPlace',
-          valueAddress: {
-            city: 'Bandung',
-            country: 'ID',
-          },
-        },
-        {
-          url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/citizenshipStatus',
-          valueCode: 'WNI',
-        },
-      ],
     };
 
     await this.loggerService.logError(
@@ -2883,8 +2741,6 @@ export class SubscribeService {
       await this.loggerService.logResponse(response?.data);
       return response?.data?.data?.patient_id;
     } catch (error) {
-      console.log('ini error log ', error);
-      console.log('ini error log ', error.response);
       await this.loggerService.logError(error.response);
       await this.loggerService.logAxiosError(error);
     }
@@ -2924,7 +2780,6 @@ export class SubscribeService {
         `reponse post customer consent , ${response?.data?.status}`,
       );
     } catch (error) {
-      console.log(error.response?.data?.issue[0]);
       await this.loggerService.logError(
         `error post customer consent ' ${error.response?.data?.issue[0]}`,
       );
@@ -2932,8 +2787,7 @@ export class SubscribeService {
   }
 
   async postConsentPatient(data: any): Promise<any> {
-    const token = await this.generateTokenClinic(data?.unit?.clinic);
-
+    const token = await this.generateTokenClinic(data?.clinic);
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -2942,18 +2796,17 @@ export class SubscribeService {
     const dataConsent = {
       patient_id: data.ihs,
       action: 'OPTIN',
-      agent: 'Nama Petugas',
+      agent: `${data?.name.satusehatConsentSettledBy} ${data?.clinic?.unit?.name}`,
     };
 
     const fullUrl = this.config.get<string>('SATU_SEHAT_URL_CONSENT');
 
     try {
       const response = await axios.post(fullUrl, dataConsent, { headers });
-      console.log(response?.data?.status);
-
+      this.loggerService.logResponse(response?.data?.data);
       return response;
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 
@@ -2962,32 +2815,32 @@ export class SubscribeService {
       id: payload?.customerId,
     });
 
-    const unit = await this.unit(payload.data?.customerConsents[0].unitId);
+    const clinic = await this.clinic(
+      payload.data?.customerConsents[0]?.clinicId,
+    );
+
     let dataCustomer = null;
 
     if (!customer.ssPatientId) {
-      console.log('ini tidak ada ihs');
-
       let dataConsent = null;
       dataCustomer = {
         customer,
-        ...unit,
+        ...clinic,
       };
 
       const response = await this.createPatientSatuSehat(dataCustomer);
 
       dataConsent = {
-        name: customer.name,
-        unit: unit,
+        name: payload.data,
+        clinic: clinic,
         ihs: response,
       };
 
       await this.postConsentPatient(dataConsent);
     } else {
-      console.log('ini ada ihs');
       dataCustomer = {
-        name: customer.name,
-        unit: unit,
+        name: payload.data,
+        clinic: clinic,
         ihs: customer.ssPatientId,
       };
 
@@ -3092,10 +2945,8 @@ export class SubscribeService {
         },
       });
 
-      console.log('reponse true ', response?.request?.issue);
       await this.loggerService.logResponse(JSON.stringify(response));
     } catch (error) {
-      console.log('reponse false ', error.response.data?.issue[0]);
       await this.loggerService.logError(JSON.stringify(error?.response?.data));
       if (!error?.response?.data) await this.loggerService.logAxiosError(error);
     }

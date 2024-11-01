@@ -10,6 +10,8 @@ import { ConfigService } from '@nestjs/config';
 import { SubscribeService } from 'src/app/subscribe/subscribe.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
+import { LoggerService } from '../logger.service';
+
 @Injectable()
 export class RoomSubscriberSatuSehat {
   private enabledClinicIdSatuSehat: string[];
@@ -18,6 +20,7 @@ export class RoomSubscriberSatuSehat {
   constructor(
     private subscribeService: SubscribeService,
     private configService: ConfigService,
+    private loggerService: LoggerService,
   ) {
     const enabledClinicIdSatuSehatString = this.configService.get<string>(
       'ENABLED_CLINIC_ID_SATU_SEHAT',
@@ -43,13 +46,12 @@ export class RoomSubscriberSatuSehat {
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
-    // console.log(payload.newData);
     const clinic = await this.subscribeService.clinic(payload.newData.clinicId);
     if (await this.checkUnitIdSatuSehat(clinic.unit?.id)) {
       try {
         this.subscribeService.createLocation(payload, request, header);
       } catch (error) {
-        console.log(error);
+        this.loggerService.logError(error);
       }
     }
   }
@@ -72,7 +74,7 @@ export class RoomSubscriberSatuSehat {
         }
       }
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 

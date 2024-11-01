@@ -11,6 +11,8 @@ import { GqlRequestService } from 'src/app/gql-request/gql-request.service';
 import { SubscribeService } from 'src/app/subscribe/subscribe.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
+import { LoggerService } from '../logger.service';
+
 @Injectable()
 export class ClinicSubscriberSatuSehat {
   private enabledClinicIdSatuSehat: string[];
@@ -19,6 +21,7 @@ export class ClinicSubscriberSatuSehat {
     private subscribeService: SubscribeService,
     private configService: ConfigService,
     private gqlRequestService: GqlRequestService,
+    private loggerService: LoggerService,
   ) {
     const enabledClinicIdSatuSehatString = this.configService.get<string>(
       'ENABLED_CLINIC_ID_SATU_SEHAT',
@@ -44,23 +47,18 @@ export class ClinicSubscriberSatuSehat {
     @RabbitRequest() request: any,
     @RabbitHeader() header: any,
   ) {
-    // console.log(payload.newData);
-    // if (await this.checkClinicIdSatuSehat(payload.newData.clinicId)) {
     const unit = await this.subscribeService.unit(payload.newData.unitId);
 
     if (await this.checkUnitIdSatuSehat(unit.id)) {
       try {
-        console.log('medical.clinic.created');
-        // this.subscribeService.createOrganization(payload, request, header);
         await this.subscribeService.createClinicBuilding(
           payload,
           request,
           header,
         );
       } catch (error) {
-        console.log(error);
+        this.loggerService.logError(error);
       }
-      // }
     }
   }
 
@@ -74,8 +72,6 @@ export class ClinicSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('medical.unit.updated');
-
       const unit = await this.gqlRequestService.unit({
         id: payload.newData?.id,
       });
@@ -97,10 +93,8 @@ export class ClinicSubscriberSatuSehat {
           this.subscribeService.updateOrganization(payload, request, header);
         }
       }
-
-      console.log('zzz');
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 

@@ -16,7 +16,6 @@ export class LoggerService implements OnModuleInit {
   private ensureLogFile(): void {
     if (!fs.existsSync(this.logFilePath)) {
       fs.writeFileSync(this.logFilePath, '', 'utf8');
-      console.log('File log.txt berhasil dibuat');
     }
   }
 
@@ -55,9 +54,7 @@ export class LoggerService implements OnModuleInit {
   private appendToFile(logMessage: string): void {
     try {
       fs.appendFileSync(this.logFilePath, logMessage, 'utf8');
-    } catch (error) {
-      console.error('Gagal menulis ke log.txt:', error);
-    }
+    } catch (error) {}
   }
 
   private getLocalDateTime(): string {

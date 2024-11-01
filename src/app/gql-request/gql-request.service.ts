@@ -5,6 +5,8 @@ import {
   BanksQueryVariables,
   ClinicQuery,
   ClinicQueryVariables,
+  ClinicStaffsQuery,
+  ClinicStaffsQueryVariables,
   ClinicsQuery,
   ClinicsQueryVariables,
   CreateBankMutation,
@@ -356,5 +358,18 @@ export class GqlRequestService {
     }
 
     return null;
+  }
+
+  async clinicStaffs(
+    args: ClinicStaffsQueryVariables,
+  ): Promise<ClinicStaffsQuery['clinicStaffs']['nodes'] | []> {
+    try {
+      const res = await this.gql.ClinicStaffs(args);
+      return res?.clinicStaffs.nodes;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return [];
   }
 }

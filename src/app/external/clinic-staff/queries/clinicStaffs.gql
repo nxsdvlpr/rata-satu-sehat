@@ -1,0 +1,67 @@
+query ClinicStaffs(
+  $where: ClinicStaffWhereInput
+  $orderBy: [ClinicStaffOrderByWithRelationInput!]
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  clinicStaffs(
+    where: $where
+    orderBy: $orderBy
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    nodes {
+      id
+      createdAt
+      clinicId
+      staffId
+      staff {
+        id
+        name
+        academicTitle
+        academicDegree
+        notes
+        group
+        birthdate
+        gender
+        user {
+          id
+          email
+          phone
+        }
+        avatar {
+          id
+          name
+          url
+        }
+        address {
+          id
+          address
+          additionalInfo
+          postcode
+          regionId
+          region {
+            id
+            provinceName
+            cityTitle
+            city
+            subdistrict
+            urban
+          }
+        }
+      }
+    }
+    totalCount
+    totalPages
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

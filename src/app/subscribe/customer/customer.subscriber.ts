@@ -9,9 +9,14 @@ import { Injectable } from '@nestjs/common';
 import { SubscribeService } from 'src/app/subscribe/subscribe.service';
 import { RMQBasePayload } from 'src/common/interfaces/rmq.interface';
 
+import { LoggerService } from '../logger.service';
+
 @Injectable()
 export class CustomerSubscriberSatuSehat {
-  constructor(private subscribeService: SubscribeService) {}
+  constructor(
+    private subscribeService: SubscribeService,
+    private loggerService: LoggerService,
+  ) {}
 
   @RabbitSubscribe({
     exchange: 'rata.customer',
@@ -23,10 +28,9 @@ export class CustomerSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('customer.customer.created');
       this.subscribeService.checkPatientApi(payload, request, header);
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 
@@ -40,10 +44,9 @@ export class CustomerSubscriberSatuSehat {
     @RabbitHeader() header: any,
   ) {
     try {
-      console.log('customer.customer.updated');
       this.subscribeService.checkPatientApi(payload, request, header);
     } catch (error) {
-      console.log(error);
+      this.loggerService.logError(error);
     }
   }
 }
