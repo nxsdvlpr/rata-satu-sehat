@@ -23,6 +23,6 @@ query product($id: Cuid!) {
     categoryId
     brandId
     mediaIds
-    icd9
+    icd9Id
   }
 }

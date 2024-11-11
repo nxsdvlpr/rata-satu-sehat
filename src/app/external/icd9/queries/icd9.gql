@@ -1,0 +1,7 @@
+query icd9($id: Cuid!) {
+  icd9(id: $id) {
+    id
+    title
+    code
+  }
+}

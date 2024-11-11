@@ -15,6 +15,8 @@ import {
   CustomerQueryVariables,
   EmrByInteractionIdQuery,
   EmrByInteractionIdQueryVariables,
+  Icd9Query,
+  Icd9QueryVariables,
   Icd10Query,
   Icd10QueryVariables,
   InteractionLogQuery,
@@ -46,16 +48,13 @@ import {
   UpdateInteractionWithoutRmqMutationVariables,
   UpdateRoomWithoutRmqMutation,
   UpdateRoomWithoutRmqMutationVariables,
+  UpdateSlipByInteractionIdMutation,
+  UpdateSlipByInteractionIdMutationVariables,
   UpdateStaffWithoutRmqMutation,
   UpdateStaffWithoutRmqMutationVariables,
   UpsertEmrByInteractionIdMutation,
   UpsertEmrByInteractionIdMutationVariables,
 } from 'generated/gql/gql';
-
-import {
-  UpdateSlipByInteractionIdMutation,
-  UpdateSlipByInteractionIdMutationVariables,
-} from '../../../generated/gql/gql';
 
 @Injectable()
 export class GqlRequestService {
@@ -325,6 +324,17 @@ export class GqlRequestService {
     try {
       const res = await this.gql.product(args);
       return res?.product || null;
+    } catch (error) {
+      console.log('Error [GqlRequest]', error);
+    }
+
+    return null;
+  }
+
+  async icd9(args: Icd9QueryVariables): Promise<Icd9Query['icd9'] | null> {
+    try {
+      const res = await this.gql.icd9(args);
+      return res?.icd9 || null;
     } catch (error) {
       console.log('Error [GqlRequest]', error);
     }

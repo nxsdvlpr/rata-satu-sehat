@@ -1327,11 +1327,18 @@ export class SubscribeService {
     return icd10;
   }
 
-  async getIcd9ByProductId(id: string): Promise<any> {
+  async getProductByProductId(id: string): Promise<any> {
     const product = await this.gqlRequestService.product({
       id: id,
     });
     return product;
+  }
+
+  async getICD9Data(id: string): Promise<any> {
+    const icd9 = await this.gqlRequestService.icd9({
+      id: id,
+    });
+    return icd9;
   }
 
   async syncConditionSatuSehatApi(
@@ -2185,14 +2192,26 @@ export class SubscribeService {
         ) {
           const codingArray = await Promise.all(
             interaction?.slip.slipItems.map(async (item) => {
-              const product = await this.getIcd9ByProductId(item.productId);
-              return product.icd9.map((icd9Item) => ({
-                system: 'http://hl7.org/fhir/sid/icd-9-cm',
-                code: icd9Item.icd9code,
-                display: icd9Item.icd9value,
-              }));
+              const product = await this.getProductByProductId(item.productId);
+              if (product?.icd9Id) {
+                const Icd9Data = await this.getICD9Data(product.icd9Id);
+
+                if (Icd9Data && Icd9Data.title && Icd9Data.code) {
+                  return [
+                    {
+                      system: 'http://hl7.org/fhir/sid/icd-9-cm',
+                      code: Icd9Data.code,
+                      display: Icd9Data.title,
+                    },
+                  ];
+                }
+              }
+              return [];
             }),
           );
+
+          console.log(codingArray.flat().length);
+
           if (codingArray.flat().length !== 0) {
             const fullUrl =
               this.config.get<string>('SATU_SEHAT_URL_RESOURCE') + 'Procedure';
@@ -2857,7 +2876,7 @@ export class SubscribeService {
   ) {
     const token = await this.generateTokenClinic(payload?.newData);
 
-    let unit = await this.gqlRequestService.unit({
+    const unit = await this.gqlRequestService.unit({
       id: payload.newData?.unitId,
     });
 
@@ -2935,7 +2954,7 @@ export class SubscribeService {
       },
     };
 
-    let url = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
+    const url = this.config.get<string>('SATU_SEHAT_URL_RESOURCE');
 
     try {
       const response = await axios.post(url + 'Location', locationData, {
